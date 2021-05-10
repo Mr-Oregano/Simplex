@@ -9,15 +9,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Introduction.h">
+    <ClInclude Include="include\App.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Log.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Ref.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Simplex.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Introduction.cpp">
+    <ClCompile Include="src\App.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Log.cpp">

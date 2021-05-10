@@ -12,11 +12,16 @@ project "Simplex-Sandbox"
 
 	includedirs {
 		"src",
-		"%{wks.location}/Simplex/include"
+		"%{wks.location}/Simplex/include",
+		"%{wks.location}/Simplex/vendor/spdlog/include"
 	}
 
 	links {
 		"Simplex"
+	}
+
+	defines {
+		"SPMX_APP"
 	}
 
 	targetdir("%{prj.location}/" .. TARGET_OUTPUT)

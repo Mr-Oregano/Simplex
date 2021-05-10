@@ -15,19 +15,25 @@ workspace "Simplex"
 	}
 
 	filter "configurations:Debug"
+		defines "SMPX_CONFIG_DEBUG"
 		optimize "off"
 		symbols "on"
 
 	filter "configurations:Release"
+		defines "SMPX_CONFIG_RELEASE"
 		optimize "on"
 		symbols "off"
 
 	filter "configurations:Dist"
+		defines "SMPX_CONFIG_DIST"
 		optimize "on"
 		symbols "off"
 
 	filter "system:windows"
 		systemversion "latest"
+
+	filter "system:windows"
+		defines "SMPX_SYSTEM_WINDOWS"
 
 	filter {}
 

@@ -15,20 +15,6 @@ project "Simplex"
 		"vendor/spdlog/include"
 	}
 
-	filter "configurations:Debug"
-		defines "SMPX_CONFIG_DEBUG"
-
-	filter "configurations:Release"
-		defines "SMPX_CONFIG_RELEASE"
-
-	filter "configurations:Dist"
-		defines "SMPX_CONFIG_DIST"
-
-	filter "system:windows"
-		defines "SMPX_SYSTEM_WINDOWS"
-
-	filter {}
-
 	defines {
 		-- Some dependencies may use C std functions which cause warnings in C++17
 		-- the following flag will silence these warnings that may be produce.
