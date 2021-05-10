@@ -5,6 +5,7 @@
 .vs/
 bin/
 bin-int/
+res/
 
 # files
 *.bat
