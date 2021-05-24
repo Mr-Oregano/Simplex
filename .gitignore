@@ -13,3 +13,4 @@ res/
 *.user
 *.vcxproj
 *.pdn
+*.vcxproj.filters
