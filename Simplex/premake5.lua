@@ -15,6 +15,9 @@ project "Simplex"
 		"vendor/spdlog/include"
 	}
 
+	pchheader "sxpch.h"
+	pchsource "src/sxpch.cpp"
+
 	defines {
 		-- Some dependencies may use C std functions which cause warnings in C++17
 		-- the following flag will silence these warnings that may be produce.

@@ -21,15 +21,16 @@ SandboxApp::~SandboxApp()
 void SandboxApp::Start()
 {
 	m_Running = true;
+
+	LOG_INFO("Hello world");
+	LOG_WARN("Hello world");
+	LOG_ERROR("Hello world");
+	LOG_CRITICAL("Hello world");
 }
 
 void SandboxApp::Update()
 {
 	while (m_Running)
 	{
-		LOG_INFO("Hello world");
-		LOG_WARN("Hello world");
-		LOG_ERROR("Hello world");
-		LOG_CRITICAL("Hello world");
 	}
 }

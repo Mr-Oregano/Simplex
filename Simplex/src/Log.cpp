@@ -1,4 +1,8 @@
 
+// Precompiled
+#include <sxpch.h>
+//
+
 #include <Log.h>
 
 void Log::Init(const std::string &name)
