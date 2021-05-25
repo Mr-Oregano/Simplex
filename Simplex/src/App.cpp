@@ -33,10 +33,11 @@ void App::ShutdownServices()
 
 int main() 
 {
-	Scope<App> app = App::GetApp();
+	Scope<App> app = App::CreateApp();
 
 	app->Start();
 	app->Update();
+	app->Shutdown();
 
 	return 0;
 }

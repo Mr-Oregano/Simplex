@@ -4,7 +4,7 @@
 #include <Simplex.h>
 #include <Ref.h>
 
-Scope<App> App::GetApp()
+Scope<App> App::CreateApp()
 {
 	return CreateScope<SandboxApp>();
 }
@@ -33,4 +33,9 @@ void SandboxApp::Update()
 	while (m_Running)
 	{
 	}
+}
+
+void SandboxApp::Shutdown()
+{
+	LOG_INFO("Terminating...");
 }

@@ -11,6 +11,7 @@ public:
 private:
 	void Start() override;
 	void Update() override;
+	void Shutdown() override;
 
 private:
 	bool m_Running;

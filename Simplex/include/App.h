@@ -14,13 +14,14 @@ public:
 protected:
 	virtual void Start() = 0;
 	virtual void Update() = 0;
+	virtual void Shutdown() = 0;
 
 private:
 	void InitServices();
 	void ShutdownServices();
 
 public:
-	static Scope<App> GetApp();
+	static Scope<App> CreateApp();
 };
 
 int main();
