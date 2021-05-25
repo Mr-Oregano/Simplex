@@ -30,6 +30,11 @@ void Win32Window::Update()
 	glfwSwapBuffers(m_Handle);
 }
 
+void Win32Window::RegisterEventCallback(std::function<void(Event&)> callback)
+{
+	m_Data.event_cb = callback;
+}
+
 void Win32Window::InitWindow()
 {
 	if (!s_InitializedGLFW)
@@ -40,6 +45,8 @@ void Win32Window::InitWindow()
 	}
 
 	CreateWindowHandle();
+	SetupEventHandling();
+
 	SetVsync(m_Data.props.vysnc);
 }
 	
@@ -123,6 +130,104 @@ void Win32Window::CreateWindowHandle()
 
 	ASSERT_CRITICAL(m_Handle, "Failed to create the window");
 	glfwMakeContextCurrent(m_Handle);
+}
+
+void Win32Window::SetupEventHandling()
+{
+	glfwSetWindowUserPointer(m_Handle, &m_Data);
+
+	glfwSetKeyCallback(m_Handle, [](GLFWwindow *window, int key, int scancode, int action, int mods)
+	{
+		auto &data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+		auto &call = data.event_cb;
+
+		if (!call)
+			return;
+
+		if (action == GLFW_RELEASE)
+		{
+			KeyUp e = {};
+			e.keyCode = key;
+			call(e);
+			return;
+		}
+
+		KeyDown e = {};
+		e.keyCode = key;
+		call(e);
+
+	});
+
+	glfwSetMouseButtonCallback(m_Handle, [](GLFWwindow *window, int button, int action, int mods)
+	{
+		auto &data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+		auto &call = data.event_cb;
+
+		if (!call)
+			return;
+
+		if  (action == GLFW_PRESS)
+		{
+			MouseButtonDown e = {};
+			glfwGetCursorPos(window, &e.x, &e.y);
+			e.mouseButton = button;
+			call(e);
+			return;
+		}
+
+		MouseButtonUp e = {};
+		glfwGetCursorPos(window, &e.x, &e.y);
+		e.mouseButton = button;
+		call(e);
+	});
+
+	glfwSetCursorPosCallback(m_Handle, [](GLFWwindow *window, double xpos, double ypos)
+	{
+		auto &data = *static_cast<WindowData *>(glfwGetWindowUserPointer(window));
+		auto &call = data.event_cb;
+
+		if (!call)
+			return;
+
+		MouseMove e = {};
+
+		e.dx = xpos - e.lastX;
+		e.dy = ypos - e.lastY;
+		e.lastX = e.x;
+		e.lastY = e.y;
+		e.x = xpos;
+		e.y = ypos;
+
+		call(e);
+	});
+
+	glfwSetScrollCallback(m_Handle, [](GLFWwindow *window, double xoffset, double yoffset)
+	{
+		auto &data = *static_cast<WindowData *>(glfwGetWindowUserPointer(window));
+		auto &call = data.event_cb;
+
+		if (!call)
+			return;
+
+		MouseScroll e = {};
+
+		e.velocityX = xoffset;
+		e.velocityY = yoffset;
+
+		call(e);
+	});
+
+	glfwSetWindowCloseCallback(m_Handle, [](GLFWwindow *window)
+	{
+		auto &data = *static_cast<WindowData *>(glfwGetWindowUserPointer(window));
+		auto &call = data.event_cb;
+
+		if (!call)
+			return;
+
+		WindowClose e = {};
+		call(e);
+	});
 }
 	
 void Win32Window::SetVisible(bool visible)

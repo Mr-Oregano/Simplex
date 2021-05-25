@@ -35,9 +35,7 @@ int main()
 {
 	Scope<App> app = App::CreateApp();
 
-	app->Start();
-	app->Update();
-	app->Shutdown();
+	app->Run();
 
 	return 0;
 }

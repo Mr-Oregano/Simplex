@@ -4,7 +4,6 @@
 
 class App
 {
-
 friend int main();
 
 public:
@@ -12,9 +11,7 @@ public:
 	virtual ~App();
 
 protected:
-	virtual void Start() = 0;
-	virtual void Update() = 0;
-	virtual void Shutdown() = 0;
+	virtual void Run() = 0;
 
 private:
 	void InitServices();

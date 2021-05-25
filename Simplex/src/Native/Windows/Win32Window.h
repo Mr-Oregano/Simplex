@@ -5,6 +5,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <functional>
+
 class Win32Window : public Window
 {
 
@@ -13,6 +15,7 @@ public:
 	virtual ~Win32Window();
 
 	virtual void Update() override;
+	virtual void RegisterEventCallback(std::function<void(Event&)> callback) override;
 
 	virtual int GetWidth() const override { return m_Data.props.width; }
 	virtual int GetHeight() const override { return m_Data.props.height; }
@@ -29,6 +32,7 @@ private:
 	void InitWindow();
 	void DestroyWindow();
 	void CreateWindowHandle();
+	void SetupEventHandling();
 
 private:
 	GLFWwindow *m_Handle = nullptr;
@@ -36,6 +40,7 @@ private:
 	struct WindowData
 	{
 		WindowProps props;
+		std::function<void(Event&)> event_cb;
 
 	} m_Data;
 

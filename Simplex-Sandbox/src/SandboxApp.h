@@ -11,9 +11,9 @@ public:
 	~SandboxApp();
 
 private:
-	void Start() override;
-	void Update() override;
-	void Shutdown() override;
+	void Run() override;
+
+	void OnEvent(Event &e);
 
 private:
 	Scope<Window> m_Window;

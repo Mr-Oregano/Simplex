@@ -2,13 +2,16 @@
 
 #include <Simplex.h>
 #include <Ref.h>
+#include <Event.h>
+
+#include <functional>
 
 enum class WindowMode
 {
 	Windowed,
 	WindowedFullscreen,
 	Fullscreen,
-	Maximized,
+	Maximized
 };
 
 struct WindowProps
@@ -25,6 +28,7 @@ class Window
 {
 public:
 	virtual void Update() = 0;
+	virtual void RegisterEventCallback(std::function<void(Event&)> callback) = 0;
 
 	virtual int GetWidth() const = 0;
 	virtual int GetHeight() const = 0;
