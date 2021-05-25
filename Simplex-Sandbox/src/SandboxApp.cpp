@@ -26,12 +26,17 @@ void SandboxApp::Start()
 	LOG_WARN("Hello world");
 	LOG_ERROR("Hello world");
 	LOG_CRITICAL("Hello world");
+
+	m_Window = Window::Create();
 }
 
 void SandboxApp::Update()
 {
+	m_Window->SetVisible();
+
 	while (m_Running)
 	{
+		m_Window->Update();
 	}
 }
 

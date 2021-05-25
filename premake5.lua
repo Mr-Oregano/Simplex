@@ -31,8 +31,6 @@ workspace "Simplex"
 
 	filter "system:windows"
 		systemversion "latest"
-
-	filter "system:windows"
 		defines "SMPX_SYSTEM_WINDOWS"
 
 	filter {}

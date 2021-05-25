@@ -13,7 +13,7 @@ project "Simplex-Sandbox"
 	includedirs {
 		"src",
 		"%{wks.location}/Simplex/include",
-		"%{wks.location}/Simplex/vendor/spdlog/include"
+		"%{wks.location}/Simplex/vendor/spdlog/include" -- TODO: should not be a 'visible' dependency
 	}
 
 	links {
@@ -24,5 +24,5 @@ project "Simplex-Sandbox"
 		"SPMX_APP"
 	}
 
-	targetdir("%{prj.location}/" .. TARGET_OUTPUT)
-	objdir("%{prj.location}/" .. OBJECT_OUTPUT)
+	targetdir(TARGET_OUTPUT)
+	objdir(OBJECT_OUTPUT)

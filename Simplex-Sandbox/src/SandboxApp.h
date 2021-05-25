@@ -1,6 +1,8 @@
 #pragma once
 
 #include <App.h>
+#include <Ref.h>
+#include <Window.h>
 
 class SandboxApp : public App
 {
@@ -14,5 +16,7 @@ private:
 	void Shutdown() override;
 
 private:
+	Scope<Window> m_Window;
 	bool m_Running;
+
 };

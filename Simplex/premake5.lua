@@ -1,22 +1,42 @@
 
+group "Vendor"
+	include "vendor/glfw"
+group ""
+
 -- Simplex Game Engine project
 project "Simplex"
 	language "C++"
 	cppdialect "C++17"
 	kind "StaticLib"
 
+	pchheader "sxpch.h"
+	pchsource "src/sxpch.cpp"
+
 	files {
 		"src/**.cpp",
 		"include/**.h"
 	}
 
+	excludes "src/Native/**"
+
+	filter "system:windows"
+		files {
+			"src/Native/Windows/**.cpp",
+			"src/Native/Windows/**.h"
+		}	
+
+	filter {}
+
 	includedirs {
 		"include",
-		"vendor/spdlog/include"
+
+		"vendor/spdlog/include",
+		"vendor/glfw/include"
 	}
 
-	pchheader "sxpch.h"
-	pchsource "src/sxpch.cpp"
+	links {
+		"GLFW",
+	}
 
 	defines {
 		-- Some dependencies may use C std functions which cause warnings in C++17
