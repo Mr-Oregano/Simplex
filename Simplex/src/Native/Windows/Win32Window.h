@@ -2,6 +2,7 @@
 
 #include <Window.h>
 #include <Simplex.h>
+#include <GraphicsContext.h>
 
 #include <GLFW/glfw3.h>
 
@@ -16,6 +17,7 @@ public:
 
 	virtual void Update() override;
 	virtual void RegisterEventCallback(std::function<void(Event&)> callback) override;
+	virtual Ref<GraphicsContext> GetGraphicsContext() override;
 
 	virtual int GetWidth() const override { return m_Data.props.width; }
 	virtual int GetHeight() const override { return m_Data.props.height; }
@@ -29,6 +31,10 @@ public:
 	virtual bool IsVisible() const override { return m_Visible; }
 
 private:
+	bool CreateGLContext();
+	bool CreateDX11Context();
+
+private:
 	void InitWindow();
 	void DestroyWindow();
 	void CreateWindowHandle();
@@ -36,6 +42,7 @@ private:
 
 private:
 	GLFWwindow *m_Handle = nullptr;
+	Ref<GraphicsContext> m_Gfx;
 
 	struct WindowData
 	{

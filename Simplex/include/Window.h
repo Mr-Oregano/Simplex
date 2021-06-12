@@ -2,6 +2,7 @@
 
 #include <Simplex.h>
 #include <Ref.h>
+#include <GraphicsContext.h>
 #include <Event.h>
 
 #include <functional>
@@ -20,6 +21,7 @@ struct WindowProps
 	int height = 720;
 	const char *title = "Untitled";
 	WindowMode mode = WindowMode::Windowed;
+	GraphicsConfig graphics = GraphicsConfig();
 	bool vysnc = false;
 	bool resizable = true;
 };
@@ -29,6 +31,7 @@ class Window
 public:
 	virtual void Update() = 0;
 	virtual void RegisterEventCallback(std::function<void(Event&)> callback) = 0;
+	virtual Ref<GraphicsContext> GetGraphicsContext() = 0;
 
 	virtual int GetWidth() const = 0;
 	virtual int GetHeight() const = 0;

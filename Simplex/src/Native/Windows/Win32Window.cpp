@@ -6,6 +6,8 @@
 #include "Window.h"
 #include "Win32Window.h"
 
+#include <glad/glad.h>
+
 Scope<Window> Window::Create(WindowProps props)
 {
 	return CreateScope<Win32Window>(props);
@@ -35,6 +37,20 @@ void Win32Window::RegisterEventCallback(std::function<void(Event&)> callback)
 	m_Data.event_cb = callback;
 }
 
+Ref<GraphicsContext> Win32Window::GetGraphicsContext()
+{
+	return m_Gfx;
+}
+
+bool Win32Window::CreateGLContext()
+{
+	if (!m_Handle)
+		return false;
+
+	glfwMakeContextCurrent(m_Handle);
+	return gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+}
+
 void Win32Window::InitWindow()
 {
 	if (!s_InitializedGLFW)
@@ -44,7 +60,31 @@ void Win32Window::InitWindow()
 		s_InitializedGLFW = true;
 	}
 
-	CreateWindowHandle();
+	// Cross platform APIs, needs to have a context created
+	// in a platform dependent way.
+	//
+	switch (m_Data.props.graphics.desiredAPI)
+	{
+		case RendererAPI::SXG_OPENGL:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+			CreateWindowHandle();
+
+			bool success = CreateGLContext();
+			ASSERT_CRITICAL(success, "Could not initialize the OpenGL context!");
+		}
+		break;
+
+		default: CreateWindowHandle(); break;
+	}
+
+	m_Gfx = GraphicsContext::Create(m_Data.props.graphics);
+	ASSERT_CRITICAL(m_Gfx != nullptr, "The desired graphics API is unsupported on this platform.");
+	//
+
 	SetupEventHandling();
 
 	SetVsync(m_Data.props.vysnc);
@@ -57,11 +97,6 @@ void Win32Window::DestroyWindow()
 	
 void Win32Window::CreateWindowHandle()
 {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-
 	glfwWindowHint(GLFW_RESIZABLE, m_Data.props.resizable);
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	glfwWindowHint(GLFW_MAXIMIZED, m_Data.props.mode == WindowMode::Maximized);
@@ -129,7 +164,6 @@ void Win32Window::CreateWindowHandle()
 	}
 
 	ASSERT_CRITICAL(m_Handle, "Failed to create the window");
-	glfwMakeContextCurrent(m_Handle);
 }
 
 void Win32Window::SetupEventHandling()
