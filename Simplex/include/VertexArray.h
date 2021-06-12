@@ -7,7 +7,7 @@
 
 struct VertexArrayProps
 {
-	SXG_TOPOLOGY topology;
+	SXG::Topology topology;
 };
 
 class VertexArray
@@ -15,6 +15,6 @@ class VertexArray
 public:
 	virtual void AddBuffer(Ref<VertexBuffer> vb) = 0;
 
-	virtual SXG_TOPOLOGY GetTopology() const = 0;
+	virtual SXG::Topology GetTopology() const = 0;
 	virtual int GetVertexCount() const = 0;
 };

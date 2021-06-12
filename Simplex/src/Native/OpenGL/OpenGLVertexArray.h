@@ -10,7 +10,7 @@ class OpenGLVertexArray : public VertexArray
 public:
 	virtual void AddBuffer(Ref<VertexBuffer> vb) override;
 
-	virtual SXG_TOPOLOGY GetTopology() const override;
+	virtual SXG::Topology GetTopology() const override;
 	virtual int GetVertexCount() const override;
 
 // Native

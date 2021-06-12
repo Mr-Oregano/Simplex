@@ -9,6 +9,8 @@
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLUtility.h"
 
+using namespace SXG;
+
 OpenGLVertexArray::OpenGLVertexArray(VertexArrayProps props)
     : m_Props(props)
 {
@@ -31,14 +33,14 @@ void OpenGLVertexArray::AddBuffer(Ref<VertexBuffer> vb)
     int offset = 0;
     for (const auto &attribute : layout.GetAttributes())
     {
-        int components = SXGTypeComponentCount(attribute.type);
+        int components = SXG::TypeComponentCount(attribute.type);
         GLenum type = SXGTypeToGL(attribute.type);
 
         glVertexArrayAttribFormat(m_ContextID, m_AttributeCount, components, type, GL_FALSE, offset);
         glVertexArrayAttribBinding(m_ContextID, m_AttributeCount, m_BindCount);
         glEnableVertexArrayAttrib(m_ContextID, m_AttributeCount);
 
-        offset += SXGTypeSize(attribute.type);
+        offset += SXG::TypeSize(attribute.type);
         ++m_AttributeCount;
     }
 
@@ -58,7 +60,7 @@ GLuint OpenGLVertexArray::ContextID() const
     return m_ContextID;
 }
 
-SXG_TOPOLOGY OpenGLVertexArray::GetTopology()const
+Topology OpenGLVertexArray::GetTopology()const
 {
     return m_Props.topology;
 }

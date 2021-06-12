@@ -4,23 +4,39 @@
 
 #include <glad/glad.h>
 
-inline GLenum SXGTypeToGL(SXG_TYPES type)
+inline GLenum SXGTypeToGL(SXG::Types type)
 {
+	using namespace SXG;
+
 	switch (type)
 	{
-		case SXG_TYPES::FLOAT:
-		case SXG_TYPES::FLOAT2: 
-		case SXG_TYPES::FLOAT3:
-		case SXG_TYPES::FLOAT4: return GL_FLOAT;
+		case Types::FLOAT:
+		case Types::FLOAT2: 
+		case Types::FLOAT3:
+		case Types::FLOAT4: return GL_FLOAT;
 		default: return 0;
 	}
 }
 
-inline GLenum SXGTopologyToGL(SXG_TOPOLOGY topology)
+inline GLenum SXGTopologyToGL(SXG::Topology topology)
 {
+	using namespace SXG;
+
 	switch (topology)
 	{
-		case SXG_TOPOLOGY::TRIANGLES: return GL_TRIANGLES;
+		case Topology::TRIANGLES: return GL_TRIANGLES;
+		default: return 0;
+	}
+}
+
+inline GLenum SXGShaderStageToGL(SXG::ShaderStageType type)
+{
+	using namespace SXG;
+
+	switch (type)
+	{
+		case ShaderStageType::VERTEX: return GL_VERTEX_SHADER;
+		case ShaderStageType::FRAGMENT: return GL_FRAGMENT_SHADER;
 		default: return 0;
 	}
 }

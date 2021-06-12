@@ -7,6 +7,8 @@
 
 #include <functional>
 
+using namespace SXG;
+
 Scope<App> App::CreateApp()
 {
 	return CreateScope<SandboxApp>();
@@ -41,12 +43,12 @@ void SandboxApp::Run()
 	};
 
 	VertexArrayProps va_create;
-	va_create.topology = SXG_TOPOLOGY::TRIANGLES;
+	va_create.topology = Topology::TRIANGLES;
 	va = gfx->CreateArray(va_create);
 
 	VertexBufferLayout layout = {
-		{ SXG_TYPES::FLOAT2, "positions" },
-		{ SXG_TYPES::FLOAT4, "colors" }
+		{ Types::FLOAT2, "a_Position" },
+		{ Types::FLOAT4, "a_Color" }
 	};
 
 	VertexBufferProps vb_create = { data, layout };
@@ -54,11 +56,11 @@ void SandboxApp::Run()
 
 	va->AddBuffer(vb);
 
-	Ref<Pipeline> shader = gfx->CreatePipelineFromFiles("res/vert.glsl", "res/frag.glsl");
+	Ref<ShaderProgram> shader = gfx->CreateShaderFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
 
-	gfx->SetPipeline(shader);
+	gfx->SetShaderProgram(shader);
 
-	gfx->ClearColor(1.0f, 0.2f, 1.0f, 1.0f);
+	gfx->ClearColor(0.15f, 0.15f, 0.18f, 1.0f);
 
 	m_Window->RegisterEventCallback([&](Event &e) { OnEvent(e); });
 
@@ -102,6 +104,6 @@ void SandboxApp::OnUpdate()
 {
 	gfx->SetArray(va);
 
-	gfx->ClearRenderTarget(SXG::COLOR_BUFFER_BIT);
+	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
 	gfx->Draw(va->GetVertexCount());
 }

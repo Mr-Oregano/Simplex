@@ -7,7 +7,7 @@
 #include <GraphicsContext.h>
 #include <VertexBuffer.h>
 #include <VertexArray.h>
-#include <Pipeline.h>
+#include <ShaderProgram.h>
 
 class SandboxApp : public App
 {

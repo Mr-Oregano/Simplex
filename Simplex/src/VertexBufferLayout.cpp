@@ -26,7 +26,7 @@ int VertexBufferLayout::CalcStride()
     int stride = 0;
     
     for (const auto &attribute : m_Attributes)
-        stride += SXGTypeSize(attribute.type);
+        stride += SXG::TypeSize(attribute.type);
 
     return stride;
 }

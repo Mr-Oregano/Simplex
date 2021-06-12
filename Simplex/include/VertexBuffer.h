@@ -9,7 +9,7 @@
 
 struct VertexAttribute
 {
-	SXG_TYPES type;
+	SXG::Types type;
 	std::string name;
 };
 

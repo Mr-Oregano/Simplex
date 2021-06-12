@@ -6,18 +6,21 @@ enum class RendererAPI
 	SXG_DX11
 };
 
-enum SXG
+namespace SXG
+{
+
+enum Clear
 {
 	COLOR_BUFFER_BIT = 1,
 	DEPTH_BUFFER_BIT = 2
 };
 
-enum class SXG_TOPOLOGY
+enum class Topology
 {
 	TRIANGLES
 };
 
-enum class SXG_TYPES
+enum class Types
 {
 	FLOAT,
 	FLOAT2,
@@ -25,26 +28,35 @@ enum class SXG_TYPES
 	FLOAT4
 };
 
-inline int SXGTypeComponentCount(SXG_TYPES type)
+enum class ShaderStageType
+{
+	VERTEX,
+	FRAGMENT
+};
+
+inline int TypeComponentCount(Types type)
 {
 	switch (type)
 	{
-		case SXG_TYPES::FLOAT:  return 1;
-		case SXG_TYPES::FLOAT2: return 2;
-		case SXG_TYPES::FLOAT3: return 3;
-		case SXG_TYPES::FLOAT4: return 4;
+		case Types::FLOAT:  return 1;
+		case Types::FLOAT2: return 2;
+		case Types::FLOAT3: return 3;
+		case Types::FLOAT4: return 4;
 		default: return 0;
 	}
 }
 
-inline int SXGTypeSize(SXG_TYPES type)
+inline int TypeSize(Types type)
 {
 	switch (type)
 	{
-		case SXG_TYPES::FLOAT:  return 1 * sizeof(float);
-		case SXG_TYPES::FLOAT2: return 2 * sizeof(float);
-		case SXG_TYPES::FLOAT3: return 3 * sizeof(float);
-		case SXG_TYPES::FLOAT4: return 4 * sizeof(float);
+		case Types::FLOAT:  return 1 * sizeof(float);
+		case Types::FLOAT2: return 2 * sizeof(float);
+		case Types::FLOAT3: return 3 * sizeof(float);
+		case Types::FLOAT4: return 4 * sizeof(float);
 		default: return 0;
 	}
 }
+
+}
+
