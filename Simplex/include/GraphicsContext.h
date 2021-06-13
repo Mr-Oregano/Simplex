@@ -17,7 +17,7 @@ inline Version MakeOpenGLVersion(int major, int minor)
 	return ((major & 0xff) << 8) | (minor & 0xff);
 }
 
-struct GraphicsConfig
+struct GraphicsProps
 {
 	SXG::API desiredAPI = SXG::API::OPENGL;
 	Version minVersion = MakeOpenGLVersion(3, 3);

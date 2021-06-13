@@ -21,7 +21,7 @@ struct WindowProps
 	int height = 720;
 	const char *title = "Untitled";
 	WindowMode mode = WindowMode::Windowed;
-	GraphicsConfig graphics = GraphicsConfig();
+	GraphicsProps graphics = GraphicsProps();
 	bool vysnc = false;
 	bool resizable = true;
 };
