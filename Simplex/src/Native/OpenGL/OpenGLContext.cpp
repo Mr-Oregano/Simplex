@@ -81,7 +81,7 @@ void OpenGLContext::ClearRenderTarget(Clear flags)
 	glClear(bitfield);
 }
 
-RendererAPI OpenGLContext::CurrentRenderer()
+API OpenGLContext::CurrentRenderer()
 {
-	return RendererAPI::SXG_OPENGL;
+	return API::OPENGL;
 }

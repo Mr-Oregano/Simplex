@@ -17,7 +17,7 @@ public:
 	virtual void ClearColor(float r, float g, float b, float a) override;
 	virtual void ClearRenderTarget(SXG::Clear flags) override;
 
-	virtual RendererAPI CurrentRenderer() override;
+	virtual SXG::API CurrentRenderer() override;
 
 // Native
 private:

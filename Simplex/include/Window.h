@@ -35,7 +35,6 @@ public:
 
 	virtual int GetWidth() const = 0;
 	virtual int GetHeight() const = 0;
-	virtual void* GetNativeWindowHandle() const = 0;
 
 	virtual void SetVsync(bool vsync) = 0;
 	virtual void SetVisible(bool visible = true) = 0;

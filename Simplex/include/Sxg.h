@@ -1,13 +1,13 @@
 #pragma once
 
-enum class RendererAPI
-{
-	SXG_OPENGL,
-	SXG_DX11
-};
-
 namespace SXG
 {
+
+enum class API
+{
+	OPENGL,
+	DIRECTX
+};
 
 enum Clear
 {

@@ -21,7 +21,6 @@ public:
 
 	virtual int GetWidth() const override { return m_Data.props.width; }
 	virtual int GetHeight() const override { return m_Data.props.height; }
-	virtual void *GetNativeWindowHandle() const override { return (void*) m_Handle; }
 
 	virtual void SetVsync(bool vsync) override;
 	virtual void SetVisible(bool visible) override;
@@ -29,10 +28,8 @@ public:
 
 	virtual bool IsVysncEnabled() const override { return m_Data.props.vysnc; }
 	virtual bool IsVisible() const override { return m_Visible; }
-
-private:
-	bool CreateGLContext();
-	bool CreateDX11Context();
+	
+	const GLFWwindow * GetNativeWindowHandle() const { return m_Handle; }
 
 private:
 	void InitWindow();

@@ -3,10 +3,16 @@
 #include "sxpch.h"
 //
 
+#include <Sxg.h>
+
 #include "Window.h"
 #include "Win32Window.h"
 
 #include <glad/glad.h>
+
+#include "../OpenGL/OpenGLContext.h"
+
+using namespace SXG;
 
 Scope<Window> Window::Create(WindowProps props)
 {
@@ -37,20 +43,6 @@ void Win32Window::RegisterEventCallback(std::function<void(Event&)> callback)
 	m_Data.event_cb = callback;
 }
 
-Ref<GraphicsContext> Win32Window::GetGraphicsContext()
-{
-	return m_Gfx;
-}
-
-bool Win32Window::CreateGLContext()
-{
-	if (!m_Handle)
-		return false;
-
-	glfwMakeContextCurrent(m_Handle);
-	return gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-}
-
 void Win32Window::InitWindow()
 {
 	if (!s_InitializedGLFW)
@@ -60,36 +52,46 @@ void Win32Window::InitWindow()
 		s_InitializedGLFW = true;
 	}
 
-	// Cross platform APIs, needs to have a context created
-	// in a platform dependent way.
-	//
 	switch (m_Data.props.graphics.desiredAPI)
 	{
-		case RendererAPI::SXG_OPENGL:
+		case API::OPENGL:
 		{
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			int versionMajor = m_Data.props.graphics.desiredVersion >> 8;
+			int versionMinor = m_Data.props.graphics.desiredVersion & 0xff;
+
+			// Cross platform APIs, needs to have a context initialized
+			// in a platform dependent way.
+			//
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, versionMajor);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, versionMinor);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 			CreateWindowHandle();
+			
+			glfwMakeContextCurrent(m_Handle);
+			bool success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+			//
 
-			bool success = CreateGLContext();
 			ASSERT_CRITICAL(success, "Could not initialize the OpenGL context!");
+			m_Gfx = CreateRef<OpenGLContext>();
+
+			LOG_INFO("OpenGL Verison: {0}", glGetString(GL_VERSION));
+			LOG_INFO("OpenGL Renderer: {0}", glGetString(GL_RENDERER));
+			LOG_INFO("OpenGL Vendor: {0}", glGetString(GL_VENDOR));
+			break;
 		}
-		break;
 
 		default: CreateWindowHandle(); break;
 	}
 
-	m_Gfx = GraphicsContext::Create(m_Data.props.graphics);
-	ASSERT_CRITICAL(m_Gfx != nullptr, "The desired graphics API is unsupported on this platform.");
+	ASSERT_CRITICAL(m_Gfx != nullptr, "The desired graphics API is not available on this platform.");
 	//
 
 	SetupEventHandling();
 
 	SetVsync(m_Data.props.vysnc);
 }
-	
+
 void Win32Window::DestroyWindow()
 {
 	glfwDestroyWindow(m_Handle);
@@ -286,4 +288,9 @@ void Win32Window::SetVsync(bool vsync)
 {
 	m_Data.props.vysnc = vsync; 
 	glfwSwapInterval(vsync ? 1 : 0);
+}
+
+Ref<GraphicsContext> Win32Window::GetGraphicsContext()
+{
+	return m_Gfx;
 }

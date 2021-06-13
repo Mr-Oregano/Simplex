@@ -10,9 +10,18 @@
 #include <vector>
 #include <string>
 
+typedef int Version;
+
+inline Version MakeOpenGLVersion(int major, int minor)
+{
+	return ((major & 0xff) << 8) | (minor & 0xff);
+}
+
 struct GraphicsConfig
 {
-	RendererAPI desiredAPI = RendererAPI::SXG_OPENGL;
+	SXG::API desiredAPI = SXG::API::OPENGL;
+	Version minVersion = MakeOpenGLVersion(3, 3);
+	Version desiredVersion = MakeOpenGLVersion(4, 6);
 };
 
 class GraphicsContext
@@ -28,8 +37,5 @@ public:
 	virtual void ClearColor(float r, float g, float b, float a) = 0;
 	virtual void ClearRenderTarget(SXG::Clear flags) = 0;
 
-	virtual RendererAPI CurrentRenderer() = 0;
-
-public:
-	static Ref<GraphicsContext> Create(GraphicsConfig config = GraphicsConfig());
+	virtual SXG::API CurrentRenderer() = 0;
 };

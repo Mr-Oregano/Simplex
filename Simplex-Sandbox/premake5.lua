@@ -7,7 +7,8 @@ project "Simplex-Sandbox"
 
 	files {
 		"src/**.cpp",
-		"src/**.h"
+		"src/**.h",
+		"res/**"
 	}
 
 	includedirs {
