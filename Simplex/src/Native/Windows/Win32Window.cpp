@@ -260,6 +260,21 @@ void Win32Window::SetupEventHandling()
 		WindowClose e = {};
 		call(e);
 	});
+
+	glfwSetWindowSizeCallback(m_Handle, [](GLFWwindow *window, int width, int height)
+	{
+		auto &data = *static_cast<WindowData *>(glfwGetWindowUserPointer(window));
+		auto &call = data.event_cb;
+
+		if (!call)
+			return;
+
+		WindowResize e = {};
+		e.newWidth = width;
+		e.newHeight = height;
+		call(e);
+
+	});
 }
 	
 void Win32Window::SetVisible(bool visible)

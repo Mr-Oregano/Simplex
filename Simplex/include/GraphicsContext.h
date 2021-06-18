@@ -31,6 +31,7 @@ public:
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) = 0;
 	virtual void ClearColor(float r, float g, float b, float a) = 0;
 	virtual void ClearRenderTarget(SXG::Clear flags) = 0;
+	virtual void SetViewport(int x, int y, int width, int height) = 0;
 
 	virtual SXG::API CurrentRenderer() = 0;
 };

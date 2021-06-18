@@ -18,6 +18,7 @@ public:
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) override;
 	virtual void ClearColor(float r, float g, float b, float a) override;
 	virtual void ClearRenderTarget(SXG::Clear flags) override;
+	virtual void SetViewport(int x, int y, int width, int height) override;
 
 	virtual SXG::API CurrentRenderer() override { return SXG::API::OPENGL; }
 

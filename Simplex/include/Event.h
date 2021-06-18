@@ -114,3 +114,11 @@ struct WindowClose : public SystemEvent
 	static EventType StaticType() { return EventType::WindowClose; }
 };
 
+struct WindowResize : public SystemEvent
+{
+	int newWidth;
+	int newHeight;
+
+	virtual EventType Type() const override { return StaticType(); }
+	static EventType StaticType() { return EventType::WindowResize; }
+};

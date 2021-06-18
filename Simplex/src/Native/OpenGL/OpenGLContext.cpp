@@ -108,3 +108,8 @@ void OpenGLContext::ClearRenderTarget(Clear flags)
 
 	glClear(bitfield);
 }
+
+void OpenGLContext::SetViewport(int x, int y, int width, int height)
+{
+	glViewport(x, y, width, height);
+}

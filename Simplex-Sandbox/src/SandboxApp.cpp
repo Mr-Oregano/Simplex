@@ -119,6 +119,11 @@ void SandboxApp::OnEvent(Event &e)
 	{
 		LOG_INFO("Mouse scrolled {0}", e.velocityY);
 	});
+
+	e.Dispatch<WindowResize>([&](WindowResize e)
+	{
+		gfx->SetViewport(0, 0, e.newWidth, e.newHeight);
+	});
 }
 
 void SandboxApp::OnUpdate()
