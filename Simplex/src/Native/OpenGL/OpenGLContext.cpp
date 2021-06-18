@@ -70,7 +70,7 @@ void OpenGLContext::DrawInstanced(int instances, int count, int start_offset)
 	glDrawArraysInstanced(topology, start_offset, count, instances);
 }
 
-void OpenGLContext::SetArray(Ref<VertexArray> va)
+void OpenGLContext::BindArray(Ref<VertexArray> va)
 {
 	ASSERT_CRITICAL(va != nullptr, "Vertex Array is null!");
 
@@ -107,9 +107,4 @@ void OpenGLContext::ClearRenderTarget(Clear flags)
 	bitfield |= (!!(flags & Clear::DEPTH_BUFFER_BIT)) * GL_DEPTH_BUFFER_BIT;
 
 	glClear(bitfield);
-}
-
-API OpenGLContext::CurrentRenderer()
-{
-	return API::OPENGL;
 }

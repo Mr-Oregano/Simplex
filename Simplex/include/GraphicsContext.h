@@ -10,18 +10,11 @@
 #include <vector>
 #include <string>
 
-typedef int Version;
-
-inline Version MakeOpenGLVersion(int major, int minor)
-{
-	return ((major & 0xff) << 8) | (minor & 0xff);
-}
-
 struct GraphicsProps
 {
 	SXG::API desiredAPI = SXG::API::OPENGL;
-	Version minVersion = MakeOpenGLVersion(3, 3);
-	Version desiredVersion = MakeOpenGLVersion(4, 6);
+	SXG::APIVersion minVersion = SXG::MakeOpenGLVersion(3, 3);
+	SXG::APIVersion desiredVersion = SXG::MakeOpenGLVersion(4, 6);
 };
 
 class GraphicsContext
@@ -34,7 +27,7 @@ public:
 	virtual void Draw(int count, int start_offset = 0) = 0;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) = 0;
 
-	virtual void SetArray(Ref<VertexArray> va) = 0;
+	virtual void BindArray(Ref<VertexArray> va) = 0;
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) = 0;
 	virtual void ClearColor(float r, float g, float b, float a) = 0;
 	virtual void ClearRenderTarget(SXG::Clear flags) = 0;

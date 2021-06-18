@@ -3,6 +3,8 @@
 namespace SXG
 {
 
+typedef int APIVersion;
+
 enum class API
 {
 	OPENGL,
@@ -59,6 +61,8 @@ bool TypeIsNormalized(Types type);
 bool TypeIsInteger(Types type);
 
 bool TypeIsFloat(Types type);
+
+APIVersion MakeOpenGLVersion(int major, int minor);
 
 }
 

@@ -14,12 +14,12 @@ public:
 	virtual void Draw(int count, int start_offset) override;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) override;
 
-	virtual void SetArray(Ref<VertexArray> va) override;
+	virtual void BindArray(Ref<VertexArray> va) override;
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) override;
 	virtual void ClearColor(float r, float g, float b, float a) override;
 	virtual void ClearRenderTarget(SXG::Clear flags) override;
 
-	virtual SXG::API CurrentRenderer() override;
+	virtual SXG::API CurrentRenderer() override { return SXG::API::OPENGL; }
 
 // Native
 public:

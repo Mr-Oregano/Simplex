@@ -95,4 +95,9 @@ bool TypeIsFloat(SXG::Types type)
 	return !TypeIsInteger(type);
 }
 
+APIVersion MakeOpenGLVersion(int major, int minor)
+{
+	return ((major & 0xff) << 8) | (minor & 0xff);
+}
+
 }
