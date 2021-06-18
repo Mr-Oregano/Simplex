@@ -26,6 +26,5 @@ private:
 	bool m_Running;
 	
 	Ref<GraphicsContext> gfx;
-	Ref<VertexBuffer> vb;
 	Ref<VertexArray> va;
 };

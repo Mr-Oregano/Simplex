@@ -27,34 +27,55 @@ void SandboxApp::Run()
 {
 	m_Running = true;
 
-	LOG_INFO("Hello world");
-	LOG_WARN("Hello world");
-	LOG_ERROR("Hello world");
-	LOG_CRITICAL("Hello world");
-
 	m_Window = Window::Create();
 
 	gfx = m_Window->GetGraphicsContext();
-
-	std::vector<float> data = {
-		-0.5f, -0.5f,	1.0f, 0.0f, 1.0f, 1.0f,
-		 0.0f,  0.5f,	0.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,	0.0f, 1.0f, 0.0f, 1.0f
-	};
 
 	VertexArrayProps va_create;
 	va_create.topology = Topology::TRIANGLES;
 	va = gfx->CreateArray(va_create);
 
-	VertexBufferLayout layout = {
-		{ Types::FLOAT2, "a_Position" },
-		{ Types::FLOAT4, "a_Color" }
+	// First buffer
+	std::vector<float> vertices = {
+		-0.25f, -0.5f,	1.0f, 0.0f, 1.0f, 1.0f,
+		 0.0f,  0.5f,	0.0f, 1.0f, 1.0f, 1.0f,
+		 0.25f, -0.5f,	0.0f, 1.0f, 0.0f, 1.0f
 	};
 
-	VertexBufferProps vb_create = { data, layout };
-	vb = gfx->CreateBuffer(vb_create);
+	VertexBufferLayout layout = {
+		{ "a_Position", Types::FLOAT2 },
+		{ "a_Color", Types::FLOAT4 }
+	};
 
+	VertexBufferProps vb_create;
+	vb_create.data = vertices.data();
+	vb_create.size = vertices.size() * sizeof(float);
+	vb_create.layout = &layout;
+
+	Ref<VertexBuffer> vb = gfx->CreateBuffer(vb_create);
 	va->AddBuffer(vb);
+	//
+
+	// Second Buffer
+	std::vector<int> color_indices = {
+		0,
+		1,
+		2
+	};
+
+	layout = {
+		{ "a_ColorIndex", Types::INT }
+	};
+
+	vb_create.data = color_indices.data();
+	vb_create.size = color_indices.size() * sizeof(int);
+	vb_create.layout = &layout;
+	vb_create.inputDataClass = InputDataClass::PER_INSTANCE;
+	vb_create.instanceDataRate = 1;
+
+	vb = gfx->CreateBuffer(vb_create);
+	va->AddBuffer(vb);
+	//
 
 	Ref<ShaderProgram> shader = gfx->CreateShaderFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
 
@@ -102,8 +123,8 @@ void SandboxApp::OnEvent(Event &e)
 
 void SandboxApp::OnUpdate()
 {
-	gfx->SetArray(va);
+	gfx->BindArray(va);
 
 	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
-	gfx->Draw(va->GetVertexCount());
+	gfx->DrawInstanced(3, va->GetVertexCount());
 }

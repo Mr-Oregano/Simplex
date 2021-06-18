@@ -8,6 +8,7 @@
 struct VertexArrayProps
 {
 	SXG::Topology topology;
+	int vertexCount = 0; // If 0, will be calculated.
 };
 
 class VertexArray

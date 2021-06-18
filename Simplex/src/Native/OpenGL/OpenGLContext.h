@@ -12,6 +12,8 @@ public:
 	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) override;
 
 	virtual void Draw(int count, int start_offset) override;
+	virtual void DrawInstanced(int instances, int count, int start_offset = 0) override;
+
 	virtual void SetArray(Ref<VertexArray> va) override;
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) override;
 	virtual void ClearColor(float r, float g, float b, float a) override;
@@ -20,6 +22,10 @@ public:
 	virtual SXG::API CurrentRenderer() override;
 
 // Native
+public:
+	OpenGLContext();
+	virtual ~OpenGLContext();
+
 private:
 	Ref<VertexArray> m_SelectedVA = nullptr;
 //

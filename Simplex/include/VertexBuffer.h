@@ -9,8 +9,8 @@
 
 struct VertexAttribute
 {
-	SXG::Types type;
 	std::string name;
+	SXG::Types type;
 };
 
 class VertexBufferLayout
@@ -31,8 +31,11 @@ private:
 
 struct VertexBufferProps
 {
-	std::vector<float> &data;
-	VertexBufferLayout layout;
+	void *data;
+	size_t size;
+	VertexBufferLayout *layout;
+	SXG::InputDataClass inputDataClass = SXG::InputDataClass::PER_VERTEX;
+	int instanceDataRate = 0;
 };
 
 class VertexBuffer

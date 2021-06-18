@@ -32,6 +32,8 @@ public:
 	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) = 0;
 
 	virtual void Draw(int count, int start_offset = 0) = 0;
+	virtual void DrawInstanced(int instances, int count, int start_offset = 0) = 0;
+
 	virtual void SetArray(Ref<VertexArray> va) = 0;
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) = 0;
 	virtual void ClearColor(float r, float g, float b, float a) = 0;

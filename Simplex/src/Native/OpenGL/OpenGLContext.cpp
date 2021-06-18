@@ -15,6 +15,25 @@
 
 using namespace SXG;
 
+OpenGLContext::OpenGLContext()
+{
+#ifndef SMPX_CONFIG_DIST
+	glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
+	{
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_LOW:
+		case GL_DEBUG_SEVERITY_MEDIUM: LOG_WARN(message); break;
+		case GL_DEBUG_SEVERITY_HIGH: LOG_ERROR(message); break;
+		}
+	}, nullptr);
+#endif
+}
+
+OpenGLContext::~OpenGLContext()
+{
+}
+
 Ref<VertexBuffer> OpenGLContext::CreateBuffer(VertexBufferProps props)
 {
 	return CreateRef<OpenGLVertexBuffer>(props);
@@ -40,6 +59,15 @@ void OpenGLContext::Draw(int count, int start_offset)
 	GLenum topology = SXGTopologyToGL(m_SelectedVA->GetTopology());
 
 	glDrawArrays(topology, start_offset, count);
+}
+
+void OpenGLContext::DrawInstanced(int instances, int count, int start_offset)
+{
+	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
+
+	GLenum topology = SXGTopologyToGL(m_SelectedVA->GetTopology());
+
+	glDrawArraysInstanced(topology, start_offset, count, instances);
 }
 
 void OpenGLContext::SetArray(Ref<VertexArray> va)

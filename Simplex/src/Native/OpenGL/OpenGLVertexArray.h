@@ -5,6 +5,8 @@
 
 #include <glad/glad.h>
 
+#include <vector>
+
 class OpenGLVertexArray : public VertexArray
 {
 public:
@@ -21,11 +23,11 @@ public:
 	GLuint ContextID() const;
 
 private:
+	std::vector<Ref<VertexBuffer>> m_Buffers;
+
 	VertexArrayProps m_Props;
 	GLuint m_ContextID = 0;
 
 	int m_AttributeCount = 0;
-	int m_BindCount = 0;
-	int m_VertexCount = 0;
 //
 };

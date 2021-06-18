@@ -25,7 +25,23 @@ enum class Types
 	FLOAT,
 	FLOAT2,
 	FLOAT3,
-	FLOAT4
+	FLOAT4,
+
+	INT_NORM,
+	INT_NORM2,
+	INT_NORM3,
+	INT_NORM4,
+
+	INT,
+	INT2,
+	INT3,
+	INT4,
+};
+
+enum class InputDataClass
+{
+	PER_INSTANCE,
+	PER_VERTEX
 };
 
 enum class ShaderStageType
@@ -34,29 +50,15 @@ enum class ShaderStageType
 	FRAGMENT
 };
 
-inline int TypeComponentCount(Types type)
-{
-	switch (type)
-	{
-		case Types::FLOAT:  return 1;
-		case Types::FLOAT2: return 2;
-		case Types::FLOAT3: return 3;
-		case Types::FLOAT4: return 4;
-		default: return 0;
-	}
-}
+int TypeComponentCount(Types type);
 
-inline int TypeSize(Types type)
-{
-	switch (type)
-	{
-		case Types::FLOAT:  return 1 * sizeof(float);
-		case Types::FLOAT2: return 2 * sizeof(float);
-		case Types::FLOAT3: return 3 * sizeof(float);
-		case Types::FLOAT4: return 4 * sizeof(float);
-		default: return 0;
-	}
-}
+int TypeSize(Types type);
+
+bool TypeIsNormalized(Types type);
+
+bool TypeIsInteger(Types type);
+
+bool TypeIsFloat(Types type);
 
 }
 

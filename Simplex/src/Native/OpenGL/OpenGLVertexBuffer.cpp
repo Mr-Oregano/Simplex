@@ -5,23 +5,38 @@
 
 #include "OpenGLVertexBuffer.h"
 
+#include <Simplex.h>
+
 OpenGLVertexBuffer::OpenGLVertexBuffer(VertexBufferProps props)
-	: m_Props(props)
+	: m_Layout(*props.layout)
 {
-	m_Size = (int) (m_Props.data.size() * sizeof(float));
+	m_Size = (int) (props.size);
+	m_InputDataClass = props.inputDataClass;
+	m_InstanceDataRate = props.instanceDataRate;
 
 	glCreateBuffers(1, &m_ContextID);
-	glNamedBufferStorage(m_ContextID, m_Size, m_Props.data.data(), GL_DYNAMIC_STORAGE_BIT);
+	glNamedBufferStorage(m_ContextID, m_Size, props.data, GL_DYNAMIC_STORAGE_BIT);
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer()
 {
+	LOG_INFO("Deleting buffer: {0}", m_ContextID);
 	glDeleteBuffers(1, &m_ContextID);
 }
 
 GLuint OpenGLVertexBuffer::ContextID() const
 {
 	return m_ContextID;
+}
+
+SXG::InputDataClass OpenGLVertexBuffer::GetInputDataClass() const
+{
+	return m_InputDataClass;
+}
+
+int OpenGLVertexBuffer::GetInstanceDataRate() const
+{
+	return m_InstanceDataRate;
 }
 
 int OpenGLVertexBuffer::Size() const
@@ -31,7 +46,7 @@ int OpenGLVertexBuffer::Size() const
 
 const VertexBufferLayout &OpenGLVertexBuffer::GetLayout() const
 {
-	return m_Props.layout;
+	return m_Layout;
 }
 
 void OpenGLVertexBuffer::BufferSubdata()

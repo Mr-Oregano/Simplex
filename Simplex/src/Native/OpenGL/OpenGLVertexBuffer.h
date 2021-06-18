@@ -15,12 +15,18 @@ public:
 	virtual ~OpenGLVertexBuffer();
 	
 	GLuint ContextID() const;
+	SXG::InputDataClass GetInputDataClass() const;
+	int GetInstanceDataRate() const;
+
 	int Size() const;
 	const VertexBufferLayout &GetLayout() const;
 
 private:
-	VertexBufferProps m_Props;
-	GLuint m_ContextID;
+	VertexBufferLayout m_Layout;
+	SXG::InputDataClass m_InputDataClass;
+	int m_InstanceDataRate;
+
+	GLuint m_ContextID = 0;
 
 	int m_Size = 0;
 //

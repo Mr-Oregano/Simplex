@@ -10,12 +10,22 @@ inline GLenum SXGTypeToGL(SXG::Types type)
 
 	switch (type)
 	{
+		case Types::INT_NORM:
+		case Types::INT_NORM2:
+		case Types::INT_NORM3:
+		case Types::INT_NORM4:
 		case Types::FLOAT:
 		case Types::FLOAT2: 
 		case Types::FLOAT3:
 		case Types::FLOAT4: return GL_FLOAT;
-		default: return 0;
+
+		case Types::INT:
+		case Types::INT2:
+		case Types::INT3:
+		case Types::INT4: return GL_INT;
 	}
+
+	return 0;
 }
 
 inline GLenum SXGTopologyToGL(SXG::Topology topology)
@@ -25,8 +35,9 @@ inline GLenum SXGTopologyToGL(SXG::Topology topology)
 	switch (topology)
 	{
 		case Topology::TRIANGLES: return GL_TRIANGLES;
-		default: return 0;
 	}
+
+	return 0;
 }
 
 inline GLenum SXGShaderStageToGL(SXG::ShaderStageType type)
@@ -37,6 +48,7 @@ inline GLenum SXGShaderStageToGL(SXG::ShaderStageType type)
 	{
 		case ShaderStageType::VERTEX: return GL_VERTEX_SHADER;
 		case ShaderStageType::FRAGMENT: return GL_FRAGMENT_SHADER;
-		default: return 0;
 	}
+
+	return 0;
 }
