@@ -23,8 +23,14 @@ inline GLenum SXGTypeToGL(SXG::Types type)
 		case Types::INT2:
 		case Types::INT3:
 		case Types::INT4: return GL_INT;
+
+		case Types::UINT:
+		case Types::UINT2:
+		case Types::UINT3:
+		case Types::UINT4: return GL_UNSIGNED_INT;
 	}
 
+	LOG_WARN("Unknown type: {0}", type);
 	return 0;
 }
 

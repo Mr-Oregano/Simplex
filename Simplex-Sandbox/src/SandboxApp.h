@@ -6,6 +6,7 @@
 
 #include <GraphicsContext.h>
 #include <VertexBuffer.h>
+#include <IndexBuffer.h>
 #include <VertexArray.h>
 #include <ShaderProgram.h>
 

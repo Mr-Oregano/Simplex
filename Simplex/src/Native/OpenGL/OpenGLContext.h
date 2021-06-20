@@ -8,11 +8,14 @@ class OpenGLContext : public GraphicsContext
 {
 public:
 	virtual Ref<VertexBuffer> CreateBuffer(VertexBufferProps props) override;
+	virtual Ref<IndexBuffer> CreateIndexBuffer(IndexBufferProps props) override;
 	virtual Ref<VertexArray> CreateArray(VertexArrayProps props) override;
 	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) override;
 
 	virtual void Draw(int count, int start_offset) override;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) override;
+	virtual void DrawIndexed(int count) override;
+	virtual void DrawIndexedInstanced(int instances, int count) override;
 
 	virtual void BindArray(Ref<VertexArray> va) override;
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) override;

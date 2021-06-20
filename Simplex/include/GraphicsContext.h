@@ -4,6 +4,7 @@
 
 #include <Sxg.h>
 #include <VertexBuffer.h>
+#include <IndexBuffer.h>
 #include <VertexArray.h>
 #include <ShaderProgram.h>
 
@@ -20,12 +21,17 @@ struct GraphicsProps
 class GraphicsContext
 {
 public:
+	virtual ~GraphicsContext() = default;
+
 	virtual Ref<VertexBuffer> CreateBuffer(VertexBufferProps props) = 0;
+	virtual Ref<IndexBuffer> CreateIndexBuffer(IndexBufferProps props) = 0;
 	virtual Ref<VertexArray> CreateArray(VertexArrayProps props) = 0;
 	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) = 0;
 
 	virtual void Draw(int count, int start_offset = 0) = 0;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) = 0;
+	virtual void DrawIndexed(int count) = 0;
+	virtual void DrawIndexedInstanced(int instances, int count) = 0;
 
 	virtual void BindArray(Ref<VertexArray> va) = 0;
 	virtual void SetShaderProgram(Ref<ShaderProgram> shader) = 0;

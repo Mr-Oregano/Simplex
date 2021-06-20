@@ -2,6 +2,9 @@
 
 class ShaderProgram
 {
+public:
+	virtual ~ShaderProgram() = default;
+
 	virtual void SetUniformFloat1(const std::string &name, float v1) = 0;
 	virtual void SetUniformFloat2(const std::string &name, float v1, float v2) = 0;
 	virtual void SetUniformFloat3(const std::string &name, float v1, float v2, float v3) = 0;

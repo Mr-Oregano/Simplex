@@ -4,6 +4,7 @@
 
 #include <Sxg.h>
 #include <VertexBuffer.h>
+#include <IndexBuffer.h>
 
 struct VertexArrayProps
 {
@@ -14,8 +15,10 @@ struct VertexArrayProps
 class VertexArray
 {
 public:
-	virtual void AddBuffer(Ref<VertexBuffer> vb) = 0;
+	virtual ~VertexArray() = default;
 
-	virtual SXG::Topology GetTopology() const = 0;
+	virtual void AddBuffer(Ref<VertexBuffer> vb) = 0;
+	virtual void SetIndexBuffer(Ref<IndexBuffer> ib) = 0;
+
 	virtual int GetVertexCount() const = 0;
 };

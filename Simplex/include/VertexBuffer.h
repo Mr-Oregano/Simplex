@@ -41,5 +41,7 @@ struct VertexBufferProps
 class VertexBuffer
 {
 public:
+	virtual ~VertexBuffer() = default;
+
 	virtual void BufferSubdata() = 0;
 };

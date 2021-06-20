@@ -50,6 +50,7 @@ OpenGLShaderProgram::OpenGLShaderProgram(const std::string &vert_src, const std:
 
 OpenGLShaderProgram::~OpenGLShaderProgram()
 {
+    LOG_INFO("Deleting resource: Shader Program {0}", m_ContextID);
     glDeleteProgram(m_ContextID);
 }
 

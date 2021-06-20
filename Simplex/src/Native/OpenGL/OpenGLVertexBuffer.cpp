@@ -20,7 +20,7 @@ OpenGLVertexBuffer::OpenGLVertexBuffer(VertexBufferProps props)
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer()
 {
-	LOG_INFO("Deleting buffer: {0}", m_ContextID);
+	LOG_INFO("Deleting resource: Vertex Buffer {0}", m_ContextID);
 	glDeleteBuffers(1, &m_ContextID);
 }
 
@@ -51,6 +51,5 @@ const VertexBufferLayout &OpenGLVertexBuffer::GetLayout() const
 
 void OpenGLVertexBuffer::BufferSubdata()
 {
-	// TODO:
-	glNamedBufferSubData(m_ContextID, 0, 0, nullptr);
+	// TODO: Complete VertexBuffer sub data/map.
 }

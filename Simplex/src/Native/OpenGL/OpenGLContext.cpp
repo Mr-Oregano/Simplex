@@ -10,6 +10,7 @@
 
 #include "OpenGLContext.h"
 #include "OpenGLVertexBuffer.h"
+#include "OpenGLIndexBuffer.h"
 #include "OpenGLVertexArray.h"
 #include "OpenGLShaderProgram.h"
 
@@ -32,11 +33,17 @@ OpenGLContext::OpenGLContext()
 
 OpenGLContext::~OpenGLContext()
 {
+	LOG_INFO("Deleting resource: Graphics Context");
 }
 
 Ref<VertexBuffer> OpenGLContext::CreateBuffer(VertexBufferProps props)
 {
 	return CreateRef<OpenGLVertexBuffer>(props);
+}
+
+Ref<IndexBuffer> OpenGLContext::CreateIndexBuffer(IndexBufferProps props)
+{
+	return CreateRef<OpenGLIndexBuffer>(props);
 }
 
 Ref<VertexArray> OpenGLContext::CreateArray(VertexArrayProps props)
@@ -55,8 +62,10 @@ Ref<ShaderProgram> OpenGLContext::CreateShaderFromFiles(const std::string &vert_
 void OpenGLContext::Draw(int count, int start_offset)
 {
 	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
+	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray *>(m_SelectedVA.get());
 
-	GLenum topology = SXGTopologyToGL(m_SelectedVA->GetTopology());
+	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
+	GLenum topology = SXGTopologyToGL(drawInfo.topology);
 
 	glDrawArrays(topology, start_offset, count);
 }
@@ -64,10 +73,40 @@ void OpenGLContext::Draw(int count, int start_offset)
 void OpenGLContext::DrawInstanced(int instances, int count, int start_offset)
 {
 	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
+	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray *>(m_SelectedVA.get());
 
-	GLenum topology = SXGTopologyToGL(m_SelectedVA->GetTopology());
+	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
+	GLenum topology = SXGTopologyToGL(drawInfo.topology);
 
 	glDrawArraysInstanced(topology, start_offset, count, instances);
+}
+
+void OpenGLContext::DrawIndexed(int count)
+{
+	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
+	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray*>(m_SelectedVA.get());
+
+	ASSERT_CRITICAL(glva->HasIndexBuffer(), "Vertex array must have a set index buffer for DrawIndexed!");
+	
+	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
+	GLenum topology = SXGTopologyToGL(drawInfo.topology);
+	GLenum type = SXGTypeToGL(drawInfo.indexType);
+
+	glDrawElements(topology, count, type, nullptr);
+}
+
+void OpenGLContext::DrawIndexedInstanced(int instances, int count)
+{
+	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
+	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray *>(m_SelectedVA.get());
+
+	ASSERT_CRITICAL(glva->HasIndexBuffer(), "Vertex array must have a set index buffer for DrawIndexed!");
+
+	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
+	GLenum topology = SXGTopologyToGL(drawInfo.topology);
+	GLenum type = SXGTypeToGL(drawInfo.indexType);
+
+	glDrawElementsInstanced(topology, count, type, nullptr, instances);
 }
 
 void OpenGLContext::BindArray(Ref<VertexArray> va)

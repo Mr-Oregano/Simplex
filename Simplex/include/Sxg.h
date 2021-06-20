@@ -24,6 +24,8 @@ enum class Topology
 
 enum class Types
 {
+	NONE,
+
 	FLOAT,
 	FLOAT2,
 	FLOAT3,
@@ -38,6 +40,11 @@ enum class Types
 	INT2,
 	INT3,
 	INT4,
+
+	UINT,
+	UINT2,
+	UINT3,
+	UINT4
 };
 
 enum class InputDataClass

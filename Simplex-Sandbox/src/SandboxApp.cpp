@@ -77,6 +77,18 @@ void SandboxApp::Run()
 	va->AddBuffer(vb);
 	//
 
+	std::vector<unsigned int> indices = {
+		0, 1, 2
+	};
+
+	IndexBufferProps ib_create;
+	ib_create.data = indices.data();
+	ib_create.size = indices.size() * sizeof(unsigned int);
+	ib_create.indexType = Types::UINT;
+
+	Ref<IndexBuffer> ib = gfx->CreateIndexBuffer(ib_create);
+	va->SetIndexBuffer(ib);
+
 	Ref<ShaderProgram> shader = gfx->CreateShaderFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
 
 	gfx->SetShaderProgram(shader);
@@ -131,5 +143,5 @@ void SandboxApp::OnUpdate()
 	gfx->BindArray(va);
 
 	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
-	gfx->DrawInstanced(3, va->GetVertexCount());
+	gfx->DrawIndexedInstanced(3, va->GetVertexCount());
 }

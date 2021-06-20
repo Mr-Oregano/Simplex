@@ -7,6 +7,7 @@
 
 #include "OpenGLVertexArray.h"
 #include "OpenGLVertexBuffer.h"
+#include "OpenGLIndexBuffer.h"
 #include "OpenGLUtility.h"
 
 using namespace SXG;
@@ -19,6 +20,7 @@ OpenGLVertexArray::OpenGLVertexArray(VertexArrayProps props)
 
 OpenGLVertexArray::~OpenGLVertexArray()
 {
+    LOG_INFO("Deleting resource: Vertex Array {0}", m_ContextID);
     glDeleteVertexArrays(1, &m_ContextID);
 }
 
@@ -72,17 +74,50 @@ void OpenGLVertexArray::AddBuffer(Ref<VertexBuffer> vb)
     m_Buffers.push_back(vb);
 }
 
+void OpenGLVertexArray::SetIndexBuffer(Ref<IndexBuffer> ib)
+{
+    m_IndexBuffer = ib;
+
+    if (HasIndexBuffer())
+    {
+        OpenGLIndexBuffer *glib = static_cast<OpenGLIndexBuffer *>(m_IndexBuffer.get());
+        glVertexArrayElementBuffer(m_ContextID, glib->ContextID());
+        return;
+    }
+
+    // If the passed buffer is nullptr then we should unset the index buffer in the 
+    // VAO
+    glVertexArrayElementBuffer(m_ContextID, 0);
+}
+
 GLuint OpenGLVertexArray::ContextID() const
 {
     return m_ContextID;
 }
 
-Topology OpenGLVertexArray::GetTopology()const
+VertexArrayDrawInfo OpenGLVertexArray::GetDrawInfo() const
 {
-    return m_Props.topology;
+    if (HasIndexBuffer())
+    {
+        OpenGLIndexBuffer *glib = static_cast<OpenGLIndexBuffer *>(m_IndexBuffer.get());
+        return { m_Props.topology, glib->GetType() };
+    }
+ 
+    return { m_Props.topology, Types::NONE };
+}
+
+bool OpenGLVertexArray::HasIndexBuffer() const
+{
+    return m_IndexBuffer != nullptr;
 }
 
 int OpenGLVertexArray::GetVertexCount() const
 {
+    if (m_IndexBuffer)
+    {
+        OpenGLIndexBuffer *glib = static_cast<OpenGLIndexBuffer*>(m_IndexBuffer.get());
+        return glib->GetVertexCount();
+    }
+
     return m_Props.vertexCount;
 }

@@ -16,18 +16,22 @@ int TypeComponentCount(Types type)
 	{
 	case Types::INT_NORM:
 	case Types::INT:
+	case Types::UINT:
 	case Types::FLOAT:  return 1;
 
 	case Types::INT_NORM2:
 	case Types::INT2:
+	case Types::UINT2:
 	case Types::FLOAT2: return 2;
 
 	case Types::INT_NORM3:
 	case Types::INT3:
+	case Types::UINT3:
 	case Types::FLOAT3: return 3;
 
 	case Types::INT_NORM4:
 	case Types::INT4:
+	case Types::UINT4:
 	case Types::FLOAT4: return 4;
 	}
 
@@ -39,18 +43,22 @@ int TypeSize(Types type)
 {
 	switch (type)
 	{
+	case Types::UINT: return 1 * sizeof(unsigned int);
 	case Types::INT_NORM:
 	case Types::INT: return 1 * sizeof(int);
 	case Types::FLOAT:  return 1 * sizeof(float);
 	
+	case Types::UINT2: return 2 * sizeof(unsigned int);
 	case Types::INT_NORM2:
 	case Types::INT2: return 2 * sizeof(int);
 	case Types::FLOAT2: return 2 * sizeof(float);
 	
+	case Types::UINT3: return 3 * sizeof(unsigned int);
 	case Types::INT_NORM3:
 	case Types::INT3: return 3 * sizeof(int);
 	case Types::FLOAT3: return 3 * sizeof(float);
 	
+	case Types::UINT4: return 4 * sizeof(unsigned int);
 	case Types::INT_NORM4:
 	case Types::INT4: return 4 * sizeof(int);
 	case Types::FLOAT4: return 4 * sizeof(float);
@@ -60,10 +68,8 @@ int TypeSize(Types type)
 	return 0;
 }
 
-bool TypeIsNormalized(SXG::Types type)
+bool TypeIsNormalized(Types type)
 {
-	using namespace SXG;
-
 	switch (type)
 	{
 	case Types::INT_NORM:
@@ -75,12 +81,14 @@ bool TypeIsNormalized(SXG::Types type)
 	return false;
 }
 
-bool TypeIsInteger(SXG::Types type)
+bool TypeIsInteger(Types type)
 {
-	using namespace SXG;
-
 	switch (type)
 	{
+	case Types::UINT:
+	case Types::UINT2:
+	case Types::UINT3:
+	case Types::UINT4:
 	case Types::INT:
 	case Types::INT2:
 	case Types::INT3:
@@ -90,9 +98,9 @@ bool TypeIsInteger(SXG::Types type)
 	return false;
 }
 
-bool TypeIsFloat(SXG::Types type)
+bool TypeIsFloat(Types type)
 {
-	return !TypeIsInteger(type);
+	return !TypeIsInteger(type) && type != Types::NONE;
 }
 
 APIVersion MakeOpenGLVersion(int major, int minor)
