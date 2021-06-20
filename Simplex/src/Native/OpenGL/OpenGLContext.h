@@ -10,6 +10,7 @@ public:
 	virtual Ref<VertexBuffer> CreateBuffer(VertexBufferProps props) override;
 	virtual Ref<IndexBuffer> CreateIndexBuffer(IndexBufferProps props) override;
 	virtual Ref<VertexArray> CreateArray(VertexArrayProps props) override;
+	virtual Ref<Texture2D> CreateTexture2D(TextureProps props) override;
 	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) override;
 
 	virtual void Draw(int count, int start_offset) override;
@@ -18,7 +19,9 @@ public:
 	virtual void DrawIndexedInstanced(int instances, int count) override;
 
 	virtual void BindArray(Ref<VertexArray> va) override;
-	virtual void SetShaderProgram(Ref<ShaderProgram> shader) override;
+	virtual void BindShaderProgram(Ref<ShaderProgram> shader) override;
+	virtual void BindTexture2D(Ref<Texture2D> texture, int unit) override;
+
 	virtual void ClearColor(float r, float g, float b, float a) override;
 	virtual void ClearRenderTarget(SXG::Clear flags) override;
 	virtual void SetViewport(int x, int y, int width, int height) override;
@@ -32,5 +35,7 @@ public:
 
 private:
 	Ref<VertexArray> m_SelectedVA = nullptr;
+	std::vector<Ref<Texture2D>> m_SelectedTexture2Ds;
+	Ref<ShaderProgram> m_SelectedShaderProgram = nullptr;
 //
 };

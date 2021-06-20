@@ -2,6 +2,7 @@
 group "Vendor"
 	include "vendor/GLFW"
 	include "vendor/Glad"
+	include "vendor/stb_image"
 group ""
 
 -- Simplex Game Engine project
@@ -35,12 +36,14 @@ project "Simplex"
 
 		"vendor/spdlog/include",
 		"vendor/GLFW/include",
-		"vendor/Glad/include"
+		"vendor/Glad/include",
+		"vendor/stb_image/include"
 	}
 
 	links {
 		"GLFW",
-		"Glad"
+		"Glad",
+		"stb_image"
 	}
 
 	defines {

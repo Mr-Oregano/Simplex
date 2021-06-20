@@ -59,6 +59,28 @@ enum class ShaderStageType
 	FRAGMENT
 };
 
+enum class TexFilter
+{
+	Nearest = 0,
+	Linear
+};
+
+enum class TexWrapMode
+{
+	ClampToEdge = 0,
+	ClampToBorder,
+	Repeat,
+	Mirror
+};
+
+enum class TexMipmapMode
+{
+	None = 0,
+	Nearest,
+	Linear,
+	Anisotropic
+};
+
 int TypeComponentCount(Types type);
 
 int TypeSize(Types type);

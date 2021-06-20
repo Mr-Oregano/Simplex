@@ -2,16 +2,15 @@
 
 layout(location = 0) in vec4 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 2) in int a_ColorIndex;
+layout(location = 2) in vec2 a_TexCoords;
 
 out vec4 v2f_Color;
-flat out int v2f_ColorIndex;
+out vec2 v2f_TexCoords;
 
 void main()
 {
-	vec4 offset = (gl_InstanceID - 1) * vec4(0.65, 0.0, 0.0, 0.0);
-	gl_Position = a_Position + offset;
+	gl_Position = a_Position;
 	
 	v2f_Color = a_Color;
-	v2f_ColorIndex = a_ColorIndex;
+	v2f_TexCoords = a_TexCoords;
 }

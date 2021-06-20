@@ -5,6 +5,9 @@
 #include <Ref.h>
 #include <Event.h>
 
+#include <ImageFileReader.h>
+#include <Texture2D.h>
+
 #include <functional>
 
 using namespace SXG;
@@ -37,14 +40,16 @@ void SandboxApp::Run()
 
 	// First buffer
 	std::vector<float> vertices = {
-		-0.25f, -0.5f,	1.0f, 0.0f, 1.0f, 1.0f,
-		 0.0f,  0.5f,	0.0f, 1.0f, 1.0f, 1.0f,
-		 0.25f, -0.5f,	0.0f, 1.0f, 0.0f, 1.0f
+		-0.5f, -0.5f,	1.0f, 0.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
+		-0.5f,  0.5f,	0.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+		 0.5f,  0.5f,	0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+		 0.5f, -0.5f,	0.0f, 1.0f, 0.0f, 1.0f,	  1.0f, 0.0f
 	};
 
 	VertexBufferLayout layout = {
 		{ "a_Position", Types::FLOAT2 },
-		{ "a_Color", Types::FLOAT4 }
+		{ "a_Color", Types::FLOAT4 },
+		{ "a_TexCoords", Types::FLOAT2 }
 	};
 
 	VertexBufferProps vb_create;
@@ -56,29 +61,9 @@ void SandboxApp::Run()
 	va->AddBuffer(vb);
 	//
 
-	// Second Buffer
-	std::vector<int> color_indices = {
-		0,
-		1,
-		2
-	};
-
-	layout = {
-		{ "a_ColorIndex", Types::INT }
-	};
-
-	vb_create.data = color_indices.data();
-	vb_create.size = color_indices.size() * sizeof(int);
-	vb_create.layout = &layout;
-	vb_create.inputDataClass = InputDataClass::PER_INSTANCE;
-	vb_create.instanceDataRate = 1;
-
-	vb = gfx->CreateBuffer(vb_create);
-	va->AddBuffer(vb);
-	//
-
 	std::vector<unsigned int> indices = {
-		0, 1, 2
+		0, 1, 2,
+		2, 3, 0
 	};
 
 	IndexBufferProps ib_create;
@@ -91,7 +76,19 @@ void SandboxApp::Run()
 
 	Ref<ShaderProgram> shader = gfx->CreateShaderFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
 
-	gfx->SetShaderProgram(shader);
+	gfx->BindShaderProgram(shader);
+
+	Scope<ImageFileReader> imageReader = ImageFileReader::Load("res/textures/logo.png");
+	unsigned char *texData = imageReader->ReadAllBytes();
+
+	TextureProps tex_create;
+	tex_create.data = texData;
+	tex_create.width = imageReader->GetWidth();
+	tex_create.height = imageReader->GetHeight();
+	tex_create.channels = imageReader->GetNumChannels();
+
+	Ref<Texture2D> texture = gfx->CreateTexture2D(tex_create);
+	gfx->BindTexture2D(texture);
 
 	gfx->ClearColor(0.15f, 0.15f, 0.18f, 1.0f);
 
@@ -143,5 +140,5 @@ void SandboxApp::OnUpdate()
 	gfx->BindArray(va);
 
 	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
-	gfx->DrawIndexedInstanced(3, va->GetVertexCount());
+	gfx->DrawIndexed(va->GetVertexCount());
 }

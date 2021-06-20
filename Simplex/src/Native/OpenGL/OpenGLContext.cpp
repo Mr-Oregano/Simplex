@@ -6,6 +6,8 @@
 #include <Simplex.h>
 #include <FileSystem.h>
 
+#include <utility>
+
 #include "OpenGLUtility.h"
 
 #include "OpenGLContext.h"
@@ -13,6 +15,8 @@
 #include "OpenGLIndexBuffer.h"
 #include "OpenGLVertexArray.h"
 #include "OpenGLShaderProgram.h"
+#include "OpenGLTexture2D.h"
+
 
 using namespace SXG;
 
@@ -29,6 +33,12 @@ OpenGLContext::OpenGLContext()
 		}
 	}, nullptr);
 #endif
+
+	// TODO: Dynamically poll the number of texture slots
+	// available on this system.
+	//
+	m_SelectedTexture2Ds.resize(16);
+
 }
 
 OpenGLContext::~OpenGLContext()
@@ -49,6 +59,11 @@ Ref<IndexBuffer> OpenGLContext::CreateIndexBuffer(IndexBufferProps props)
 Ref<VertexArray> OpenGLContext::CreateArray(VertexArrayProps props)
 {
 	return CreateRef<OpenGLVertexArray>(props);
+}
+
+Ref<Texture2D> OpenGLContext::CreateTexture2D(TextureProps props)
+{
+	return CreateRef<OpenGLTexture2D>(props);
 }
 
 Ref<ShaderProgram> OpenGLContext::CreateShaderFromFiles(const std::string &vert_path, const std::string &frag_path)
@@ -119,10 +134,10 @@ void OpenGLContext::BindArray(Ref<VertexArray> va)
 	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray*>(va.get());
 	glBindVertexArray(glva->ContextID());
 
-	m_SelectedVA = va;
+	m_SelectedVA = std::move(va);
 }
 
-void OpenGLContext::SetShaderProgram(Ref<ShaderProgram> shader)
+void OpenGLContext::BindShaderProgram(Ref<ShaderProgram> shader)
 {
 	ASSERT_CRITICAL(shader != nullptr, "Shader Program is null!");
 
@@ -131,6 +146,22 @@ void OpenGLContext::SetShaderProgram(Ref<ShaderProgram> shader)
 	//
 	OpenGLShaderProgram *glsp = static_cast<OpenGLShaderProgram*>(shader.get());
 	glUseProgram(glsp->ContextID());
+
+	m_SelectedShaderProgram = std::move(shader);
+}
+
+void OpenGLContext::BindTexture2D(Ref<Texture2D> texture, int unit)
+{
+	ASSERT_CRITICAL(texture != nullptr, "Texture is null!");
+	ASSERT_CRITICAL(-1 < unit && unit < 16, "Texture unit must be between [{0}, {1}]!", 0, 15);
+
+	// The passed texture better be an opengl texture, otherwise
+	// I will be disappointed >:(
+	//
+	OpenGLTexture2D *gltx = static_cast<OpenGLTexture2D*>(texture.get());
+	glBindTextureUnit(unit, gltx->ContextID());
+
+	m_SelectedTexture2Ds[unit] = std::move(texture);
 }
 
 void OpenGLContext::ClearColor(float r, float g, float b, float a)
