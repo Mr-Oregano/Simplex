@@ -14,3 +14,4 @@ bin-int/
 *.pdn
 *.vcxproj.filters
 *.cap
+Makefile

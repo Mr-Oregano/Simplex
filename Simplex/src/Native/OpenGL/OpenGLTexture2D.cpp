@@ -68,7 +68,7 @@ void OpenGLTexture2D::LoadTexture(unsigned char *data)
         {
             float anisotropy_max = 0;
             glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy_max);
-            float amount = anisotropy_max > 4.0f ? anisotropy_max : 4.0;
+            float amount = anisotropy_max > 4.0f ? anisotropy_max : 4.0f;
             glTextureParameterf(m_ContextID, GL_TEXTURE_MAX_ANISOTROPY_EXT, amount);
         }
         else

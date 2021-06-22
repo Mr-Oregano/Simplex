@@ -28,9 +28,21 @@ SandboxApp::~SandboxApp()
 
 void SandboxApp::Run()
 {
+	LOG_INFO("Test");
 	m_Running = true;
 
-	m_Window = Window::Create();
+	WindowProps win_create;
+	win_create.title = "Simplex Sandbox";
+	win_create.width = 1280;
+	win_create.height = 720;
+	win_create.resizable = true;
+	win_create.vysnc = false;
+	win_create.mode = WindowMode::Windowed;
+	win_create.graphics.desiredAPI = API::OPENGL;
+	win_create.graphics.desiredVersion = MakeOpenGLVersion(4, 6);
+	win_create.graphics.minVersion = MakeOpenGLVersion(4, 5);
+
+	m_Window = Window::Create(win_create);
 
 	gfx = m_Window->GetGraphicsContext();
 

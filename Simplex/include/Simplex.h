@@ -3,25 +3,21 @@
 #include <Log.h>
 
 #ifndef SMPX_CONFIG_DIST
-	#define LOG_INFO(x, ...)		Log::Info(x, __VA_ARGS__)
-	#define LOG_WARN(x, ...)		Log::Warn(x, __VA_ARGS__)
-	#define LOG_ERROR(x, ...)		Log::Error(x, __VA_ARGS__)
-	#define LOG_CRITICAL(x, ...)	Log::Critical(x, __VA_ARGS__)
+	#define LOG_INFO(...)		Log::Info(__VA_ARGS__)
+	#define LOG_WARN(...)		Log::Warn(__VA_ARGS__)
+	#define LOG_ERROR(...)		Log::Error(__VA_ARGS__)
+	#define LOG_CRITICAL(...)	Log::Critical(__VA_ARGS__)
 
-	#define ASSERT_WARN(x, m, ...) do { if (!(x)) { LOG_WARN(m, __VA_ARGS__); } } while(0)
-	#define ASSERT_ERROR(x, m, ...) do { if (!(x)) { LOG_WARN(m, __VA_ARGS__); } } while(0)
-	#define ASSERT_CRITICAL(x, m, ...) do { if (!(x)) { LOG_CRITICAL(m, __VA_ARGS__); exit(-1); } } while(0)
+	#define ASSERT_WARN(x, ...) do { if (!(x)) { LOG_WARN(__VA_ARGS__); } } while(0)
+	#define ASSERT_ERROR(x, ...) do { if (!(x)) { LOG_WARN(__VA_ARGS__); } } while(0)
+	#define ASSERT_CRITICAL(x, ...) do { if (!(x)) { LOG_CRITICAL(__VA_ARGS__); std::cin.get(); exit(-1); } } while(0)
 #else
-	#define LOG_INFO(x, ...)		
-	#define LOG_WARN(x, ...)		
-	#define LOG_ERROR(x, ...)	
-	#define LOG_CRITICAL(x, ...) 
+	#define LOG_INFO(...)		
+	#define LOG_WARN(...)		
+	#define LOG_ERROR(...)	
+	#define LOG_CRITICAL(...) 
 
-	#define ASSERT_WARN(x, m, ...)
-	#define ASSERT_ERROR(x, m, ...)
-	#define ASSERT_CRITICAL(x, m, ...)
-#endif
-
-#ifndef SMPX_SYSTEM_WINDOWS
-	#error "Simplex only supports Windows currently"
+	#define ASSERT_WARN(x, ...)
+	#define ASSERT_ERROR(x, ...)
+	#define ASSERT_CRITICAL(x, ...)
 #endif

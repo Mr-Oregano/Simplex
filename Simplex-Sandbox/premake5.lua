@@ -21,6 +21,24 @@ project "Simplex-Sandbox"
 		"Simplex"
 	}
 
+	filter "toolset:not msc"
+		links {
+			"GLFW",
+			"Glad",
+			"stb_image",
+		}
+
+	filter "system:linux"
+		links {
+			"GL",
+			"dl",
+			"m",
+			"X11",
+			"pthread"
+		}
+
+	filter {}
+
 	defines {
 		"SPMX_APP"
 	}

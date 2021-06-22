@@ -33,6 +33,9 @@ workspace "Simplex"
 		systemversion "latest"
 		defines "SMPX_SYSTEM_WINDOWS"
 
+	filter "system:linux"
+		defines "SMPX_SYSTEM_LINUX"
+
 	filter {}
 
 	include "Simplex"

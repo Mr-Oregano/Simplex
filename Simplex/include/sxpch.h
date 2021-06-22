@@ -1,5 +1,3 @@
-#pragma once
-
 #ifdef SMPX_SYSTEM_WINDOWS
 #include <Windows.h>
 #endif

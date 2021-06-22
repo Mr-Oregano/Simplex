@@ -6,7 +6,7 @@
 #include <Sxg.h>
 
 #include "Window.h"
-#include "Win32Window.h"
+#include "LinuxWindow.h"
 
 #include <glad/glad.h>
 
@@ -16,34 +16,34 @@ using namespace SXG;
 
 Scope<Window> Window::Create(WindowProps props)
 {
-	return CreateScope<Win32Window>(props);
+	return CreateScope<LinuxWindow>(props);
 }
 
-bool Win32Window::s_InitializedGLFW = false;
+bool LinuxWindow::s_InitializedGLFW = false;
 
-Win32Window::Win32Window(WindowProps props)
+LinuxWindow::LinuxWindow(WindowProps props)
 {
 	m_Data.props = props;
 	InitWindow();
 }
 	
-Win32Window::~Win32Window()
+LinuxWindow::~LinuxWindow()
 {
 	DestroyWindow();
 }
 	
-void Win32Window::Update()
+void LinuxWindow::Update()
 {
 	glfwPollEvents();
 	glfwSwapBuffers(m_Handle);
 }
 
-void Win32Window::RegisterEventCallback(std::function<void(Event&)> callback)
+void LinuxWindow::RegisterEventCallback(std::function<void(Event&)> callback)
 {
 	m_Data.event_cb = callback;
 }
 
-void Win32Window::InitWindow()
+void LinuxWindow::InitWindow()
 {
 	if (!s_InitializedGLFW)
 	{
@@ -90,12 +90,12 @@ void Win32Window::InitWindow()
 	SetVsync(m_Data.props.vysnc);
 }
 
-void Win32Window::DestroyWindow()
+void LinuxWindow::DestroyWindow()
 {
 	glfwDestroyWindow(m_Handle);
 }
 	
-void Win32Window::CreateWindowHandle()
+void LinuxWindow::CreateWindowHandle()
 {
 	glfwWindowHint(GLFW_RESIZABLE, m_Data.props.resizable);
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -166,7 +166,7 @@ void Win32Window::CreateWindowHandle()
 	ASSERT_CRITICAL(m_Handle, "Failed to create the window");
 }
 
-void Win32Window::SetupEventHandling()
+void LinuxWindow::SetupEventHandling()
 {
 	glfwSetWindowUserPointer(m_Handle, &m_Data);
 
@@ -279,7 +279,7 @@ void Win32Window::SetupEventHandling()
 	});
 }
 	
-void Win32Window::SetVisible(bool visible)
+void LinuxWindow::SetVisible(bool visible)
 {
 	m_Visible = visible;
 
@@ -292,18 +292,18 @@ void Win32Window::SetVisible(bool visible)
 	glfwHideWindow(m_Handle);
 }
 
-void Win32Window::SetWindowMode(WindowMode mode)
+void LinuxWindow::SetWindowMode(WindowMode mode)
 {
 	// TODO: Implement SetWindowMode functionality
 }
 
-void Win32Window::SetVsync(bool vsync)
+void LinuxWindow::SetVsync(bool vsync)
 {
 	m_Data.props.vysnc = vsync; 
 	glfwSwapInterval(vsync ? 1 : 0);
 }
 
-Ref<GraphicsContext> Win32Window::GetGraphicsContext()
+Ref<GraphicsContext> LinuxWindow::GetGraphicsContext()
 {
 	return m_Gfx;
 }

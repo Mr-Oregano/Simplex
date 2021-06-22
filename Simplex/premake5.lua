@@ -20,12 +20,29 @@ project "Simplex"
 		"include/**.h"
 	}
 
-	excludes "src/Native/Windows/**"
+	excludes "src/Native/**"
+
+	files {
+		"src/Native/FileSystem/**.cpp",
+		"src/Native/FileSystem/**.h"
+	}
 
 	filter "system:windows"
 		files {
 			"src/Native/Windows/**.cpp",
-			"src/Native/Windows/**.h"
+			"src/Native/Windows/**.h",
+
+			"src/Native/OpenGL/**.cpp",
+			"src/Native/OpenGL/**.h"
+		}	
+
+	filter "system:linux"
+		files {
+			"src/Native/Linux/**.cpp",
+			"src/Native/Linux/**.h",
+			
+			"src/Native/OpenGL/**.cpp",
+			"src/Native/OpenGL/**.h"			
 		}	
 
 	filter {}
@@ -40,11 +57,13 @@ project "Simplex"
 		"vendor/stb_image/include"
 	}
 
-	links {
-		"GLFW",
-		"Glad",
-		"stb_image"
-	}
+	filter "toolset:msc"
+		links {
+			"GLFW",
+			"Glad"
+		}
+
+	filter {}
 
 	defines {
 		-- This project uses Glad as an OpenGL loader library so it is not necessary for
