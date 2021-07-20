@@ -35,6 +35,7 @@ struct VertexBufferProps
 	size_t size;
 	VertexBufferLayout *layout;
 	SXG::InputDataClass inputDataClass = SXG::InputDataClass::PER_VERTEX;
+	SXG::BufferUsage usage = SXG::BufferUsage::STATIC;
 	int instanceDataRate = 0;
 };
 

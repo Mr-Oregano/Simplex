@@ -56,11 +56,8 @@ void OpenGLTexture2D::LoadTexture(unsigned char *data)
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, m_Channels);
 
-    // OpenGL does not have a DSA version of glTexImage2D >:(
-    //
-    glBindTexture(GL_TEXTURE_2D, m_ContextID);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, format, GL_UNSIGNED_BYTE, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glTextureStorage2D(m_ContextID, 1, GL_RGBA8, m_Width, m_Height);
+    glTextureSubImage2D(m_ContextID, 0, 0, 0, m_Width, m_Height, format, GL_UNSIGNED_BYTE, data);
 
     if (m_Mipmap == TexMipmapMode::Anisotropic)
     {

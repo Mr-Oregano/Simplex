@@ -5,6 +5,8 @@
 
 #include "OpenGLVertexBuffer.h"
 
+#include "OpenGLUtility.h"
+
 #include <Simplex.h>
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(VertexBufferProps props)
@@ -15,7 +17,7 @@ OpenGLVertexBuffer::OpenGLVertexBuffer(VertexBufferProps props)
 	m_InstanceDataRate = props.instanceDataRate;
 
 	glCreateBuffers(1, &m_ContextID);
-	glNamedBufferStorage(m_ContextID, m_Size, props.data, GL_DYNAMIC_STORAGE_BIT);
+	glNamedBufferStorage(m_ContextID, m_Size, props.data, SXGUsageToBufferStorageFlag(props.usage));
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer()

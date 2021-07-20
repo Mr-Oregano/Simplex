@@ -53,6 +53,12 @@ enum class InputDataClass
 	PER_VERTEX
 };
 
+enum class BufferUsage
+{
+	STATIC,
+	DYNAMIC
+};
+
 enum class ShaderStageType
 {
 	VERTEX,
