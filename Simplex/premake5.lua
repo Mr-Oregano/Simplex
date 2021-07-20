@@ -17,32 +17,25 @@ project "Simplex"
 	files {
 		"src/**.cpp",
 		"src/**.h",
-		"include/**.h"
-	}
+		"include/**.h",
 
-	excludes "src/Native/**"
-
-	files {
-		"src/Native/FileSystem/**.cpp",
-		"src/Native/FileSystem/**.h"
+		-- Native
+		"native/FileSystem/**.cpp",
+		"native/FileSystem/**.h",
+		"native/OpenGL/**.cpp",
+		"native/OpenGL/**.h"	
 	}
 
 	filter "system:windows"
 		files {
-			"src/Native/Windows/**.cpp",
-			"src/Native/Windows/**.h",
-
-			"src/Native/OpenGL/**.cpp",
-			"src/Native/OpenGL/**.h"
+			"native/Windows/**.cpp",
+			"native/Windows/**.h"
 		}	
 
 	filter "system:linux"
 		files {
-			"src/Native/Linux/**.cpp",
-			"src/Native/Linux/**.h",
-			
-			"src/Native/OpenGL/**.cpp",
-			"src/Native/OpenGL/**.h"			
+			"native/Linux/**.cpp",
+			"native/Linux/**.h"
 		}	
 
 	filter {}

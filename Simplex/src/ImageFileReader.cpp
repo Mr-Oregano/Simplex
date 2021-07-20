@@ -5,7 +5,9 @@
 
 #include "ImageFileReader.h"
 
-#include "../src/Native/FileSystem/PNGFileReader.h"
+// TODO: Should not be including native files in CORE
+//
+#include "../native/FileSystem/PNGFileReader.h"
 
 #include <Simplex.h>
 
