@@ -14,4 +14,13 @@ This project uses [premake](https://premake.github.io/) version 5 to build proje
 After premake has generated the project files, there will be a "Sandbox" testing application for you to build and run.
 
 ## Dependencies
-The following is a list of 3rd party dependencies used by the *Simplex Game Engine*:
+The following is a list of 3rd party dependencies used (or will be used) by the *Simplex Game Engine*:
+
+ - [GLFW](https://gitlab.com/Sympleque/glfw)
+ - [Glad](https://glad.dav1d.de/)
+ - [Spdlog](https://github.com/gabime/spdlog)
+ - [ImGUI](https://gitlab.com/Sympleque/imgui)
+ - [glm](https://github.com/g-truc/glm)
+ - [stb](https://github.com/nothings/stb)
+ - [openal-soft](https://gitlab.com/Sympleque/openal-soft)
+ - [dr_wav](https://github.com/mackron/dr_libs/blob/master/dr_wav.h)
