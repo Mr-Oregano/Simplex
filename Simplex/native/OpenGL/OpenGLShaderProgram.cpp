@@ -105,45 +105,45 @@ GLint OpenGLShaderProgram::GetUniformLocation(const std::string &name)
 
 void OpenGLShaderProgram::SetUniformFloat1(const std::string &name, float v1)
 {
-    glUniform1f(GetUniformLocation(name), v1);
+    glProgramUniform1f(m_ContextID, GetUniformLocation(name), v1);
 }
 
 void OpenGLShaderProgram::SetUniformFloat2(const std::string &name, float v1, float v2)
 {
-    glUniform2f(GetUniformLocation(name), v1, v2);
+    glProgramUniform2f(m_ContextID, GetUniformLocation(name), v1, v2);
 }
 
 void OpenGLShaderProgram::SetUniformFloat3(const std::string &name, float v1, float v2, float v3)
 {
-    glUniform3f(GetUniformLocation(name), v1, v2, v3);
+    glProgramUniform3f(m_ContextID, GetUniformLocation(name), v1, v2, v3);
 }
 
 void OpenGLShaderProgram::SetUniformFloat4(const std::string &name, float v1, float v2, float v3, float v4)
 {
-    glUniform4f(GetUniformLocation(name), v1, v2, v3, v4);
+    glProgramUniform4f(m_ContextID, GetUniformLocation(name), v1, v2, v3, v4);
 }
 
 void OpenGLShaderProgram::SetUniformInt1(const std::string &name, int v1)
 {
-    glUniform1i(GetUniformLocation(name), v1);
+    glProgramUniform1i(m_ContextID, GetUniformLocation(name), v1);
 }
 
 void OpenGLShaderProgram::SetUniformInt2(const std::string &name, int v1, int v2)
 {
-    glUniform2i(GetUniformLocation(name), v1, v2);
+    glProgramUniform2i(m_ContextID, GetUniformLocation(name), v1, v2);
 }
 
 void OpenGLShaderProgram::SetUniformInt3(const std::string &name, int v1, int v2, int v3)
 {
-    glUniform3i(GetUniformLocation(name), v1, v2, v3);
+    glProgramUniform3i(m_ContextID, GetUniformLocation(name), v1, v2, v3);
 }
 
 void OpenGLShaderProgram::SetUniformInt4(const std::string &name, int v1, int v2, int v3, int v4)
 {
-    glUniform4i(GetUniformLocation(name), v1, v2, v3, v4);
+    glProgramUniform4i(m_ContextID, GetUniformLocation(name), v1, v2, v3, v4);
 }
 
 void OpenGLShaderProgram::SetUniformMat4(const std::string &name, const float *m)
 {
-    glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, m);
+    glProgramUniformMatrix4fv(m_ContextID, GetUniformLocation(name), 1, GL_FALSE, m);
 }
