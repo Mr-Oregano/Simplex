@@ -6,14 +6,17 @@
 #include <App.h>
 
 #include <Log.h>
+#include <Simplex.h>
 
 App::App()
 {
 	InitServices();
+	LOG_INFO("Initialized services.");
 }
 
 App::~App()
 {
+	LOG_INFO("Shutting down services...");
 	ShutdownServices();
 }
 
