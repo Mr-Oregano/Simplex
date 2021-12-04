@@ -9,6 +9,7 @@ class OpenGLContext : public GraphicsContext
 public:
 	virtual Ref<VertexBuffer> CreateBuffer(VertexBufferProps props) override;
 	virtual Ref<IndexBuffer> CreateIndexBuffer(IndexBufferProps props) override;
+	virtual Ref<UniformBuffer> CreateUniformBuffer(UniformBufferProps props) override;
 	virtual Ref<VertexArray> CreateArray(VertexArrayProps props) override;
 	virtual Ref<Texture2D> CreateTexture2D(TextureProps props) override;
 	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) override;
@@ -20,6 +21,7 @@ public:
 
 	virtual void BindArray(Ref<VertexArray> va) override;
 	virtual void BindShaderProgram(Ref<ShaderProgram> shader) override;
+	virtual void BindUniformBuffer(Ref<UniformBuffer> ub, int slot, SXG::ShaderStageType shader) override;
 	virtual void BindTexture2D(Ref<Texture2D> texture, int unit) override;
 
 	virtual void ClearColor(float r, float g, float b, float a) override;

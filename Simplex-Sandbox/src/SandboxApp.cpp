@@ -28,7 +28,6 @@ SandboxApp::~SandboxApp()
 
 void SandboxApp::Run()
 {
-	LOG_INFO("Test");
 	m_Running = true;
 
 	WindowProps win_create;
@@ -43,8 +42,10 @@ void SandboxApp::Run()
 	win_create.graphics.minVersion = MakeOpenGLVersion(4, 5);
 
 	m_Window = Window::Create(win_create);
+	m_Window->RegisterEventCallback([&](Event &e) { OnEvent(e); });
 
 	gfx = m_Window->GetGraphicsContext();
+	gfx->ClearColor(0.15f, 0.15f, 0.18f, 1.0f);
 
 	VertexArrayProps va_create;
 	va_create.topology = Topology::TRIANGLES;
@@ -56,6 +57,17 @@ void SandboxApp::Run()
 		-0.5f,  0.5f,	0.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
 		 0.5f,  0.5f,	0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 1.0f,
 		 0.5f, -0.5f,	0.0f, 1.0f, 0.0f, 1.0f,	  1.0f, 0.0f
+	};
+
+	std::vector<float> uniforms = {
+		0.5f, 0.8f, 1.0f, 1.0f
+	};
+
+	std::vector<float> vs_uniforms = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
 	};
 
 	VertexBufferLayout layout = {
@@ -88,7 +100,17 @@ void SandboxApp::Run()
 
 	Ref<ShaderProgram> shader = gfx->CreateShaderFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
 
-	gfx->BindShaderProgram(shader);
+	UniformBufferProps ub_create;
+	ub_create.data = uniforms.data();
+	ub_create.size = uniforms.size() * sizeof(float);
+	ub_create.usage = BufferUsage::STATIC;
+
+	Ref<UniformBuffer> ub = gfx->CreateUniformBuffer(ub_create);
+
+	ub_create.data = vs_uniforms.data();
+	ub_create.size = vs_uniforms.size() * sizeof(float);
+	
+	Ref<UniformBuffer> ub2 = gfx->CreateUniformBuffer(ub_create);
 
 	Scope<ImageFileReader> imageReader = ImageFileReader::Load("res/textures/logo.png");
 	unsigned char *texData = imageReader->ReadAllBytes();
@@ -100,15 +122,15 @@ void SandboxApp::Run()
 	tex_create.channels = imageReader->GetNumChannels();
 
 	Ref<Texture2D> texture = gfx->CreateTexture2D(tex_create);
+
+	gfx->BindShaderProgram(shader);
 	gfx->BindTexture2D(texture);
-
-	gfx->ClearColor(0.15f, 0.15f, 0.18f, 1.0f);
-
-	m_Window->RegisterEventCallback([&](Event &e) { OnEvent(e); });
-
-	m_Window->SetVisible();
+	gfx->BindUniformBuffer(ub, 1, ShaderStageType::FRAGMENT);
+	gfx->BindUniformBuffer(ub2, 0, ShaderStageType::VERTEX);
 
 	// Update
+	m_Window->SetVisible();
+
 	while (m_Running)
 	{
 		OnUpdate();

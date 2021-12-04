@@ -13,10 +13,10 @@
 #include "OpenGLContext.h"
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLIndexBuffer.h"
+#include "OpenGLUniformBuffer.h"
 #include "OpenGLVertexArray.h"
 #include "OpenGLShaderProgram.h"
 #include "OpenGLTexture2D.h"
-
 
 using namespace SXG;
 
@@ -54,6 +54,11 @@ Ref<VertexBuffer> OpenGLContext::CreateBuffer(VertexBufferProps props)
 Ref<IndexBuffer> OpenGLContext::CreateIndexBuffer(IndexBufferProps props)
 {
 	return CreateRef<OpenGLIndexBuffer>(props);
+}
+
+Ref<UniformBuffer> OpenGLContext::CreateUniformBuffer(UniformBufferProps props)
+{
+	return CreateRef<OpenGLUniformBuffer>(props);
 }
 
 Ref<VertexArray> OpenGLContext::CreateArray(VertexArrayProps props)
@@ -148,6 +153,20 @@ void OpenGLContext::BindShaderProgram(Ref<ShaderProgram> shader)
 	glUseProgram(glsp->ContextID());
 
 	m_SelectedShaderProgram = std::move(shader);
+}
+
+void OpenGLContext::BindUniformBuffer(Ref<UniformBuffer> ub, int slot, ShaderStageType shader)
+{
+	// The passed buffer better be an opengl buffer, otherwise
+	// I will be disappointed >:(
+	//
+	OpenGLUniformBuffer *glub = static_cast<OpenGLUniformBuffer *>(ub.get());
+		
+	// NOTE: The passed shader stage enum is ignored for OpenGL implementations.
+	//		 This is for use with DX11.
+	//
+	glUniformBlockBinding(glub->ContextID(), slot, slot);
+	glBindBufferBase(GL_UNIFORM_BUFFER, slot, glub->ContextID());
 }
 
 void OpenGLContext::BindTexture2D(Ref<Texture2D> texture, int unit)
