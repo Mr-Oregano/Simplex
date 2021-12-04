@@ -29,6 +29,8 @@ struct WindowProps
 class Window
 {
 public:
+	virtual ~Window() = default;
+
 	virtual void Update() = 0;
 	virtual void RegisterEventCallback(std::function<void(Event&)> callback) = 0;
 	virtual Ref<GraphicsContext> GetGraphicsContext() = 0;
