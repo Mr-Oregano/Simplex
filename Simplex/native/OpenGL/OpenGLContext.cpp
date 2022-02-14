@@ -39,6 +39,9 @@ OpenGLContext::OpenGLContext()
 	//
 	m_SelectedTexture2Ds.resize(16);
 
+	GLint maxUniformBindings;
+	glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &maxUniformBindings);
+	m_SelectedUBOs.resize(maxUniformBindings);
 }
 
 OpenGLContext::~OpenGLContext()
@@ -157,6 +160,9 @@ void OpenGLContext::BindShaderProgram(Ref<ShaderProgram> shader)
 
 void OpenGLContext::BindUniformBuffer(Ref<UniformBuffer> ub, int slot, ShaderStageType shader)
 {
+	ASSERT_CRITICAL(slot >= 0, "Slot index must be 0 or greater");
+	ASSERT_CRITICAL(slot < m_SelectedUBOs.size(), "Maximum UBO slots allowed on this hardware is {}", m_SelectedUBOs.size());
+
 	// The passed buffer better be an opengl buffer, otherwise
 	// I will be disappointed >:(
 	//
@@ -167,6 +173,8 @@ void OpenGLContext::BindUniformBuffer(Ref<UniformBuffer> ub, int slot, ShaderSta
 	//
 	glUniformBlockBinding(glub->ContextID(), slot, slot);
 	glBindBufferBase(GL_UNIFORM_BUFFER, slot, glub->ContextID());
+
+	m_SelectedUBOs[slot] = std::move(ub);
 }
 
 void OpenGLContext::BindTexture2D(Ref<Texture2D> texture, int unit)

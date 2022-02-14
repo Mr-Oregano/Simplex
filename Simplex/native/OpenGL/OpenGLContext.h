@@ -37,7 +37,9 @@ public:
 
 private:
 	Ref<VertexArray> m_SelectedVA = nullptr;
-	std::vector<Ref<Texture2D>> m_SelectedTexture2Ds;
 	Ref<ShaderProgram> m_SelectedShaderProgram = nullptr;
+
+	std::vector<Ref<Texture2D>> m_SelectedTexture2Ds;
+	std::vector<Ref<UniformBuffer>> m_SelectedUBOs;
 //
 };
