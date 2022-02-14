@@ -4,3 +4,7 @@
 [submodule "Simplex/vendor/GLFW"]
 	path = Simplex/vendor/GLFW
 	url = https://gitlab.com/Sympleque/glfw.git
+[submodule "Simplex/vendor/imgui"]
+	path = Simplex/vendor/imgui
+	url = https://github.com/Sexy-Spice/imgui
+	branch = docking

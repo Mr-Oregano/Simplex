@@ -3,6 +3,7 @@ group "Vendor"
 	include "vendor/GLFW"
 	include "vendor/Glad"
 	include "vendor/stb_image"
+	include "vendor/imgui"
 group ""
 
 -- Simplex Game Engine project
@@ -23,7 +24,7 @@ project "Simplex"
 		"native/FileSystem/**.cpp",
 		"native/FileSystem/**.h",
 		"native/OpenGL/**.cpp",
-		"native/OpenGL/**.h"	
+		"native/OpenGL/**.h"
 	}
 
 	filter "system:windows"
@@ -47,7 +48,9 @@ project "Simplex"
 		"vendor/spdlog/include",
 		"vendor/GLFW/include",
 		"vendor/Glad/include",
-		"vendor/stb_image/include"
+		"vendor/stb_image/include",
+		"vendor/imgui",
+		"vendor/imgui/backends"
 	}
 
 	filter "toolset:msc"
@@ -57,6 +60,8 @@ project "Simplex"
 		}
 
 	filter {}
+
+	links "ImGui"
 
 	defines {
 		-- This project uses Glad as an OpenGL loader library so it is not necessary for
@@ -70,7 +75,9 @@ project "Simplex"
 		-- Using the C++17 dialect on the 'fmt' library (used by 'spdlog'')
 		-- Will generate several warnings, the following flag will suppress 
 		-- these warnings.
-		"_SILENCE_CXX17_RESULT_OF_DEPRECATION_WARNING"
+		"_SILENCE_CXX17_RESULT_OF_DEPRECATION_WARNING",
+
+		"SMPX_IMGUI"
 	}
 
 	targetdir(TARGET_OUTPUT)

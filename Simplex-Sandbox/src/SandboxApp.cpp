@@ -10,40 +10,62 @@
 
 #include <functional>
 
+#include <SmpxImGui.h>
+
 using namespace SXG;
 
 Scope<App> App::CreateApp()
 {
-	return CreateScope<SandboxApp>();
+	AppProps props;
+
+	props.windowProps.title = "Simplex Sandbox";
+	props.windowProps.width = 1280;
+	props.windowProps.height = 720;
+	props.windowProps.resizable = true;
+	props.windowProps.vysnc = false;
+	props.windowProps.mode = WindowMode::Windowed;
+	props.windowProps.graphics.desiredAPI = API::OPENGL;
+	props.windowProps.graphics.desiredVersion = MakeOpenGLVersion(4, 6);
+	props.windowProps.graphics.minVersion = MakeOpenGLVersion(4, 5);
+
+	return CreateScope<SandboxApp>(props);
 }
 
-SandboxApp::SandboxApp()
-	: m_Running(false)
+SandboxApp::SandboxApp(const AppProps &props) : App(props) {}
+
+SandboxApp::~SandboxApp() {}
+
+void SandboxApp::OnEvent(Event &e)
 {
+	e.Dispatch<WindowClose>([&](auto)
+	{
+		m_Running = false;
+	});
+
+	e.Dispatch<KeyDown>([](KeyDown e)
+	{
+		LOG_INFO("Key down {0}", (char) e.keyCode);
+	});
+
+	e.Dispatch<MouseButtonDown>([](MouseButtonDown e)
+	{
+		LOG_INFO("Mouse button down {0}", e.mouseButton);
+	});
+
+	e.Dispatch<MouseScroll>([](MouseScroll e)
+	{
+		LOG_INFO("Mouse scrolled {0}", e.velocityY);
+	});
+
+	e.Dispatch<WindowResize>([&](WindowResize e)
+	{
+		gfx->SetViewport(0, 0, e.newWidth, e.newHeight);
+	});
 }
 
-SandboxApp::~SandboxApp()
+void SandboxApp::OnStart()
 {
-}
-
-void SandboxApp::Run()
-{
-	m_Running = true;
-
-	WindowProps win_create;
-	win_create.title = "Simplex Sandbox";
-	win_create.width = 1280;
-	win_create.height = 720;
-	win_create.resizable = true;
-	win_create.vysnc = false;
-	win_create.mode = WindowMode::Windowed;
-	win_create.graphics.desiredAPI = API::OPENGL;
-	win_create.graphics.desiredVersion = MakeOpenGLVersion(4, 6);
-	win_create.graphics.minVersion = MakeOpenGLVersion(4, 5);
-
-	m_Window = Window::Create(win_create);
 	m_Window->RegisterEventCallback([&](Event &e) { OnEvent(e); });
-
 	gfx = m_Window->GetGraphicsContext();
 	gfx->ClearColor(0.15f, 0.15f, 0.18f, 1.0f);
 
@@ -109,7 +131,7 @@ void SandboxApp::Run()
 
 	ub_create.data = vs_uniforms.data();
 	ub_create.size = vs_uniforms.size() * sizeof(float);
-	
+
 	Ref<UniformBuffer> ub2 = gfx->CreateUniformBuffer(ub_create);
 
 	Scope<ImageFileReader> imageReader = ImageFileReader::Load("res/textures/logo.png");
@@ -127,46 +149,6 @@ void SandboxApp::Run()
 	gfx->BindTexture2D(texture);
 	gfx->BindUniformBuffer(ub, 1, ShaderStageType::FRAGMENT);
 	gfx->BindUniformBuffer(ub2, 0, ShaderStageType::VERTEX);
-
-	// Update
-	m_Window->SetVisible();
-
-	while (m_Running)
-	{
-		OnUpdate();
-		m_Window->Update();
-	}
-	//
-
-	LOG_INFO("Terminating...");
-}
-
-void SandboxApp::OnEvent(Event &e)
-{
-	e.Dispatch<WindowClose>([&](auto)
-	{
-		m_Running = false;
-	});
-
-	e.Dispatch<KeyDown>([](KeyDown e)
-	{
-		LOG_INFO("Key down {0}", (char) e.keyCode);
-	});
-
-	e.Dispatch<MouseButtonDown>([](MouseButtonDown e)
-	{
-		LOG_INFO("Mouse button down {0}", e.mouseButton);
-	});
-
-	e.Dispatch<MouseScroll>([](MouseScroll e)
-	{
-		LOG_INFO("Mouse scrolled {0}", e.velocityY);
-	});
-
-	e.Dispatch<WindowResize>([&](WindowResize e)
-	{
-		gfx->SetViewport(0, 0, e.newWidth, e.newHeight);
-	});
 }
 
 void SandboxApp::OnUpdate()
@@ -175,4 +157,11 @@ void SandboxApp::OnUpdate()
 
 	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
 	gfx->DrawIndexed(va->GetVertexCount());
+}
+
+void SandboxApp::OnStop() {}
+
+void SandboxApp::OnImGui()
+{
+	ImGui::ShowDemoWindow();
 }

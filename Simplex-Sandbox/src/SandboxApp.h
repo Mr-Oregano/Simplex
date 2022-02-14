@@ -14,19 +14,18 @@
 class SandboxApp : public App
 {
 public:
-	SandboxApp();
+	SandboxApp(const AppProps &props);
 	~SandboxApp();
 
 private:
-	void Run() override;
+	void OnStart() override;
+	void OnUpdate() override;
+	void OnStop() override;
+	void OnImGui() override;
 
 	void OnEvent(Event &e);
-	void OnUpdate();
 
 private:
-	Scope<Window> m_Window;
-	bool m_Running;
-	
-	Ref<GraphicsContext> gfx;
 	Ref<VertexArray> va;
+	Ref<GraphicsContext> gfx;
 };

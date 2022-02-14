@@ -3,6 +3,7 @@
 #include <Simplex.h>
 #include <Ref.h>
 #include <GraphicsContext.h>
+#include <SmpxImGui.h>
 #include <Event.h>
 
 #include <functional>
@@ -45,5 +46,8 @@ public:
 	virtual bool IsVysncEnabled() const = 0;
 	virtual bool IsVisible() const = 0;
 
+	virtual Scope<ImGuiBackend> CreateGuiBackend() = 0;
+
+public:
 	static Scope<Window> Create(WindowProps props = WindowProps());
 };

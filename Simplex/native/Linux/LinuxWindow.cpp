@@ -307,3 +307,10 @@ Ref<GraphicsContext> LinuxWindow::GetGraphicsContext()
 {
 	return m_Gfx;
 }
+
+Scope<ImGuiBackend> Win32Window::CreateGuiBackend()
+{
+	ASSERT_CRITICAL(m_Data.props.graphics.desiredAPI == API::OPENGL, "ImGui backend currently requires OpenGL.");
+
+	return CreateScope<Win32GuiBackend>(m_Handle);
+}

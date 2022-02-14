@@ -14,6 +14,7 @@ project "Simplex-Sandbox"
 	includedirs {
 		"src",
 		"%{wks.location}/Simplex/include",
+		"%{wks.location}/Simplex/vendor/imgui",
 		"%{wks.location}/Simplex/vendor/spdlog/include" -- TODO: should not be a 'visible' dependency
 	}
 
@@ -26,6 +27,7 @@ project "Simplex-Sandbox"
 			"GLFW",
 			"Glad",
 			"stb_image",
+			"ImGui"
 		}
 
 	filter "system:linux"

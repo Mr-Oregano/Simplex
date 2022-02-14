@@ -11,6 +11,7 @@
 #include <glad/glad.h>
 
 #include "../OpenGL/OpenGLContext.h"
+#include "Win32GuiBackend.h"
 
 using namespace SXG;
 
@@ -306,4 +307,11 @@ void Win32Window::SetVsync(bool vsync)
 Ref<GraphicsContext> Win32Window::GetGraphicsContext()
 {
 	return m_Gfx;
+}
+
+Scope<ImGuiBackend> Win32Window::CreateGuiBackend()
+{
+	ASSERT_CRITICAL(m_Data.props.graphics.desiredAPI == API::OPENGL, "ImGui backend currently requires OpenGL.");
+
+	return CreateScope<Win32GuiBackend>(m_Handle);
 }
