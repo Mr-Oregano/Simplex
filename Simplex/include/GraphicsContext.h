@@ -16,7 +16,7 @@
 struct GraphicsProps
 {
 	SXG::API desiredAPI = SXG::API::OPENGL;
-	SXG::APIVersion minVersion = SXG::MakeOpenGLVersion(3, 3);
+	SXG::APIVersion minVersion = SXG::MakeOpenGLVersion(4, 5);
 	SXG::APIVersion desiredVersion = SXG::MakeOpenGLVersion(4, 6);
 };
 
