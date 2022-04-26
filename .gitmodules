@@ -3,8 +3,8 @@
 	url = https://github.com/gabime/spdlog.git
 [submodule "Simplex/vendor/GLFW"]
 	path = Simplex/vendor/GLFW
-	url = https://gitlab.com/Sympleque/glfw.git
+	url = https://github.com/Mr-Oregano/glfw.git
 [submodule "Simplex/vendor/imgui"]
 	path = Simplex/vendor/imgui
-	url = https://github.com/Sexy-Spice/imgui
+	url = https://github.com/Mr-Oregano/imgui.git
 	branch = docking
