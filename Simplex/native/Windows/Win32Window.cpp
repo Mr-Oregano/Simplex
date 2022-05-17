@@ -78,8 +78,13 @@ void Win32Window::InitWindow()
 			ASSERT_CRITICAL(success, "Could not initialize the OpenGL context!");
 			m_Gfx = CreateRef<OpenGLContext>();
 
-			LOG_INFO("Backend API selected: OpenGL {0}", glGetString(GL_VERSION));
-			LOG_INFO("Using physical device: {0}\t({1})", glGetString(GL_RENDERER), glGetString(GL_VENDOR));
+			LOG_INFO("Backend API selected: OpenGL {0}", 
+				reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+			
+			LOG_INFO("Using physical device: {0}\t({1})", 
+				reinterpret_cast<const char *>(glGetString(GL_RENDERER)), 
+				reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+
 			break;
 		}
 	}

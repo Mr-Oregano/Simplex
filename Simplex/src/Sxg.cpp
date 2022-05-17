@@ -35,7 +35,7 @@ int TypeComponentCount(Types type)
 	case Types::FLOAT4: return 4;
 	}
 
-	LOG_WARN("Unknown component count of type {0}", type);
+	LOG_WARN("Unknown component count of type");
 	return 0;
 }
 
@@ -64,7 +64,7 @@ int TypeSize(Types type)
 	case Types::FLOAT4: return 4 * sizeof(float);
 	}
 
-	LOG_WARN("Unknown size of type {0}", type);
+	LOG_WARN("Unknown size of type");
 	return 0;
 }
 

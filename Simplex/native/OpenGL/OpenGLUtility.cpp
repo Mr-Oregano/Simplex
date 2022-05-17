@@ -33,8 +33,8 @@ GLenum SXGTypeToGL(SXG::Types type)
 	case Types::UINT4: return GL_UNSIGNED_INT;
 	}
 
-	LOG_WARN("Unknown type: {0}", type);
-	return 0;
+	LOG_WARN("Unknown conversion to GL type, default to GL_FLOAT");
+	return GL_FLOAT;
 }
 
 GLenum SXGTopologyToGL(SXG::Topology topology)
@@ -46,7 +46,8 @@ GLenum SXGTopologyToGL(SXG::Topology topology)
 	case Topology::TRIANGLES: return GL_TRIANGLES;
 	}
 
-	return 0;
+	LOG_WARN("Unknown conversion to GL topology, default to GL_TRIANGLES");
+	return GL_TRIANGLES;
 }
 
 GLenum SXGShaderStageToGL(SXG::ShaderStageType type)
@@ -59,7 +60,8 @@ GLenum SXGShaderStageToGL(SXG::ShaderStageType type)
 	case ShaderStageType::FRAGMENT: return GL_FRAGMENT_SHADER;
 	}
 
-	return 0;
+	LOG_WARN("Unknown conversion to GL shader stage, default to GL_VERTEX_SHADER");
+	return GL_VERTEX_SHADER;
 }
 
 GLenum ChannelsToFormatGL(int channels)
@@ -98,8 +100,8 @@ GLenum SXGFilterToGL(SXG::TexFilter filter, SXG::TexMipmapMode mipmap)
 		}
 	}
 
-	LOG_WARN("Unknown filter {0}_{1}", filter, mipmap);
-	return 0;
+	LOG_WARN("Unknown conversion to GL texture filter, default to GL_LINEAR");
+	return GL_LINEAR;
 
 }
 
@@ -115,8 +117,8 @@ GLenum SXGWrapModeToGL(SXG::TexWrapMode wrap)
 	case TexWrapMode::Repeat: return GL_REPEAT;
 	}
 
-	LOG_WARN("Unknown texture wrap mode {0}", wrap);
-	return 0;
+	LOG_WARN("Unknown conversion to GL texture wrap mode, default to GL_CLAMP_TO_EDGE");
+	return GL_CLAMP_TO_EDGE;
 }
 
 GLbitfield SXGUsageToBufferStorageFlag(SXG::BufferUsage usage)
@@ -125,10 +127,7 @@ GLbitfield SXGUsageToBufferStorageFlag(SXG::BufferUsage usage)
 
 	switch (usage)
 	{
-	case BufferUsage::STATIC: return 0;
 	case BufferUsage::DYNAMIC: return GL_DYNAMIC_STORAGE_BIT;
+	default: return 0;
 	}
-
-	LOG_WARN("Unknown buffer usage {0}", usage);
-	return 0;
 }
