@@ -18,12 +18,14 @@ Scope<App> App::CreateApp()
 {
 	AppProps props;
 
+	props.name = "The Simplex Sandbox";
+	props.version = MAKE_APP_VERSION(1, 0);
 	props.windowProps.title = "Simplex Sandbox";
-	props.windowProps.width = 1280;
-	props.windowProps.height = 720;
+	props.windowProps.width = 1920;
+	props.windowProps.height = 1080;
 	props.windowProps.resizable = true;
 	props.windowProps.vysnc = false;
-	props.windowProps.mode = WindowMode::Windowed;
+	props.windowProps.mode = WindowMode::Maximized;
 	props.windowProps.graphics.desiredAPI = API::OPENGL;
 	props.windowProps.graphics.desiredVersion = MakeOpenGLVersion(4, 6);
 	props.windowProps.graphics.minVersion = MakeOpenGLVersion(4, 5);

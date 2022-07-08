@@ -3,8 +3,12 @@
 #include <Ref.h>
 #include <Window.h>
 
+#define MAKE_APP_VERSION(major, minor) ((major << (sizeof(int) / 2)) | (minor & 0xffff))
+
 struct AppProps
 {
+	const char *name = "Untitled";
+	int version = MAKE_APP_VERSION(1, 0);
 	WindowProps windowProps;
 };
 
