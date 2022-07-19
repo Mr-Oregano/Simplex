@@ -2,27 +2,27 @@
 
 #include <GraphicsContext.h>
 
-#include "OpenGLVertexArray.h"
+#include "Resources/OpenGLShaderProgram.h"
+#include "Resources/OpenGLVertexArray.h"
+#include "Resources/OpenGLVertexBuffer.h"
+#include "Resources/OpenGLIndexBuffer.h"
+#include "Resources/OpenGLUniformBuffer.h"
+#include "Resources/OpenGLTexture2D.h"
 
 class OpenGLContext : public GraphicsContext
 {
 public:
-	virtual Ref<VertexBuffer> CreateBuffer(VertexBufferProps props) override;
-	virtual Ref<IndexBuffer> CreateIndexBuffer(IndexBufferProps props) override;
-	virtual Ref<UniformBuffer> CreateUniformBuffer(UniformBufferProps props) override;
-	virtual Ref<VertexArray> CreateArray(VertexArrayProps props) override;
-	virtual Ref<Texture2D> CreateTexture2D(TextureProps props) override;
-	virtual Ref<ShaderProgram> CreateShaderFromFiles(const std::string &vertpath, const std::string &fragpath) override;
+	virtual VertexBufferManager &GetVertexBufferManager() override { return m_VertexBufferManager; }
+	virtual IndexBufferManager &GetIndexBufferManager() override { return m_IndexBufferManager; }
+	virtual UniformBufferManager &GetUniformBufferManager() override { return m_UniformBufferManager; }
+	virtual VertexArrayManager &GetVertexArrayManager() override { return m_VertexArrayManager; }
+	virtual Texture2DManager &GetTexture2DManager() override { return m_Texture2DManager; }
+	virtual ShaderProgramManager &GetShaderManager() override { return m_ShaderProgramManager; }
 
 	virtual void Draw(int count, int start_offset) override;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) override;
 	virtual void DrawIndexed(int count) override;
 	virtual void DrawIndexedInstanced(int instances, int count) override;
-
-	virtual void BindArray(Ref<VertexArray> va) override;
-	virtual void BindShaderProgram(Ref<ShaderProgram> shader) override;
-	virtual void BindUniformBuffer(Ref<UniformBuffer> ub, int slot, SXG::ShaderStageType shader) override;
-	virtual void BindTexture2D(Ref<Texture2D> texture, int unit) override;
 
 	virtual void ClearColor(float r, float g, float b, float a) override;
 	virtual void ClearRenderTarget(SXG::Clear flags) override;
@@ -36,10 +36,10 @@ public:
 	virtual ~OpenGLContext();
 
 private:
-	Ref<VertexArray> m_SelectedVA = nullptr;
-	Ref<ShaderProgram> m_SelectedShaderProgram = nullptr;
-
-	std::vector<Ref<Texture2D>> m_SelectedTexture2Ds;
-	std::vector<Ref<UniformBuffer>> m_SelectedUBOs;
-//
+	OpenGLVertexBufferManager m_VertexBufferManager;
+	OpenGLIndexBufferManager m_IndexBufferManager;
+	OpenGLUniformBufferManager m_UniformBufferManager;
+	OpenGLVertexArrayManager m_VertexArrayManager;
+	OpenGLTexture2DManager m_Texture2DManager;
+	OpenGLShaderProgramManager m_ShaderProgramManager;
 };

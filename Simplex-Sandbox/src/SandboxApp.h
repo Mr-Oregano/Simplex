@@ -26,6 +26,6 @@ private:
 	void OnEvent(Event &e);
 
 private:
-	Ref<VertexArray> va;
+	VertexArrayHandle va;
 	Ref<GraphicsContext> gfx;
 };

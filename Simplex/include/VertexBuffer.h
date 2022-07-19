@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <vector>
 
+#include <Resource.h>
 #include <Sxg.h>
 
 struct VertexAttribute
@@ -16,6 +17,7 @@ struct VertexAttribute
 class VertexBufferLayout
 {
 public:
+	VertexBufferLayout() = default;
 	VertexBufferLayout(std::initializer_list<VertexAttribute> attributes);
 	
 	int GetStride() const;
@@ -39,10 +41,15 @@ struct VertexBufferProps
 	int instanceDataRate = 0;
 };
 
-class VertexBuffer
+struct VertexBufferHandle : public ResourceHandle {};
+
+class VertexBufferManager
 {
 public:
-	virtual ~VertexBuffer() = default;
+	virtual ~VertexBufferManager() = default;
 
-	virtual void BufferSubdata() = 0;
+	virtual VertexBufferHandle Create(const VertexBufferProps&) = 0;
+	virtual void Destroy(VertexBufferHandle) = 0;
+
+	virtual void BufferSubData(VertexBufferHandle, std::uint32_t offset, std::uint32_t size, void *data) = 0;
 };

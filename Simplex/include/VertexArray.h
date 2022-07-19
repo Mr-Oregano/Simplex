@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Resource.h>
 #include <Ref.h>
 
 #include <Sxg.h>
@@ -12,13 +13,19 @@ struct VertexArrayProps
 	int vertexCount = 0; // If 0, will be calculated.
 };
 
-class VertexArray
+struct VertexArrayHandle : public ResourceHandle {};
+
+class VertexArrayManager
 {
 public:
-	virtual ~VertexArray() = default;
+	virtual ~VertexArrayManager() = default;
 
-	virtual void AddBuffer(Ref<VertexBuffer> vb) = 0;
-	virtual void SetIndexBuffer(Ref<IndexBuffer> ib) = 0;
+	virtual VertexArrayHandle Create(const VertexArrayProps&) = 0;
+	virtual void Destroy(VertexArrayHandle) = 0;
 
-	virtual int GetVertexCount() const = 0;
+	virtual void Bind(VertexArrayHandle) const = 0;
+
+	virtual void AddBuffer(VertexArrayHandle, VertexBufferHandle) = 0;
+	virtual void SetIndexBuffer(VertexArrayHandle, IndexBufferHandle) = 0;
+	virtual int GetVertexCount(VertexArrayHandle) const = 0;
 };

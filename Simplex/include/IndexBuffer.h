@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Resource.h>
 #include <Sxg.h>
 
 struct IndexBufferProps
@@ -9,10 +10,15 @@ struct IndexBufferProps
 	SXG::Types indexType;
 };
 
-class IndexBuffer
+struct IndexBufferHandle : public ResourceHandle {};
+
+class IndexBufferManager
 {
 public:
-	virtual ~IndexBuffer() = default;
+	virtual ~IndexBufferManager() = default;
 
-	virtual void BufferSubdata() = 0;
+	virtual IndexBufferHandle Create(const IndexBufferProps&) = 0;
+	virtual void Destroy(IndexBufferHandle) = 0;
+	
+	virtual void BufferSubdata(IndexBufferHandle, std::uint32_t offset, std::uint32_t size, const void *data) = 0;
 };

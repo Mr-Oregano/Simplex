@@ -73,28 +73,33 @@ void SandboxApp::OnStart()
 
 	VertexArrayProps va_create;
 	va_create.topology = Topology::TRIANGLES;
-	va = gfx->CreateArray(va_create);
+
+	va = gfx->GetVertexArrayManager().Create(va_create);
 
 	// First buffer
-	std::vector<float> vertices = {
+	std::vector<float> vertices = 
+	{
 		-0.5f, -0.5f,	1.0f, 0.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
 		-0.5f,  0.5f,	0.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
 		 0.5f,  0.5f,	0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 1.0f,
 		 0.5f, -0.5f,	0.0f, 1.0f, 0.0f, 1.0f,	  1.0f, 0.0f
 	};
 
-	std::vector<float> uniforms = {
+	std::vector<float> uniforms = 
+	{
 		0.5f, 0.8f, 1.0f, 1.0f
 	};
 
-	std::vector<float> vs_uniforms = {
+	std::vector<float> vs_uniforms = 
+	{
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.5f, 1.0f
 	};
 
-	VertexBufferLayout layout = {
+	VertexBufferLayout layout = 
+	{
 		{ "a_Position", Types::FLOAT2 },
 		{ "a_Color", Types::FLOAT4 },
 		{ "a_TexCoords", Types::FLOAT2 }
@@ -105,8 +110,8 @@ void SandboxApp::OnStart()
 	vb_create.size = vertices.size() * sizeof(float);
 	vb_create.layout = &layout;
 
-	Ref<VertexBuffer> vb = gfx->CreateBuffer(vb_create);
-	va->AddBuffer(vb);
+	VertexBufferHandle vb = gfx->GetVertexBufferManager().Create(vb_create);
+	gfx->GetVertexArrayManager().AddBuffer(va, vb);
 	//
 
 	std::vector<unsigned int> indices = {
@@ -119,22 +124,22 @@ void SandboxApp::OnStart()
 	ib_create.size = indices.size() * sizeof(unsigned int);
 	ib_create.indexType = Types::UINT;
 
-	Ref<IndexBuffer> ib = gfx->CreateIndexBuffer(ib_create);
-	va->SetIndexBuffer(ib);
+	IndexBufferHandle ib = gfx->GetIndexBufferManager().Create(ib_create);
+	gfx->GetVertexArrayManager().SetIndexBuffer(va, ib);
 
-	Ref<ShaderProgram> shader = gfx->CreateShaderFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
+	ShaderProgramHandle shader = gfx->GetShaderManager().CreateFromFiles("res/shaders/vert.glsl", "res/shaders/frag.glsl");
 
 	UniformBufferProps ub_create;
 	ub_create.data = uniforms.data();
 	ub_create.size = uniforms.size() * sizeof(float);
 	ub_create.usage = BufferUsage::STATIC;
 
-	Ref<UniformBuffer> ub = gfx->CreateUniformBuffer(ub_create);
+	UniformBufferHandle ub = gfx->GetUniformBufferManager().Create(ub_create);
 
 	ub_create.data = vs_uniforms.data();
 	ub_create.size = vs_uniforms.size() * sizeof(float);
 
-	Ref<UniformBuffer> ub2 = gfx->CreateUniformBuffer(ub_create);
+	UniformBufferHandle ub2 = gfx->GetUniformBufferManager().Create(ub_create);
 
 	Scope<ImageFileReader> imageReader = ImageFileReader::Load("res/textures/logo.png");
 	unsigned char *texData = imageReader->ReadAllBytes();
@@ -145,20 +150,20 @@ void SandboxApp::OnStart()
 	tex_create.height = imageReader->GetHeight();
 	tex_create.channels = imageReader->GetNumChannels();
 
-	Ref<Texture2D> texture = gfx->CreateTexture2D(tex_create);
+	TextureHandle texture = gfx->GetTexture2DManager().Create(tex_create);
 
-	gfx->BindShaderProgram(shader);
-	gfx->BindTexture2D(texture);
-	gfx->BindUniformBuffer(ub, 1, ShaderStageType::FRAGMENT);
-	gfx->BindUniformBuffer(ub2, 0, ShaderStageType::VERTEX);
+	gfx->GetShaderManager().Bind(shader);
+	gfx->GetTexture2DManager().Bind(texture);
+	gfx->GetUniformBufferManager().Bind(ub, 1, ShaderStageType::FRAGMENT);
+	gfx->GetUniformBufferManager().Bind(ub2, 0, ShaderStageType::VERTEX);
 }
 
 void SandboxApp::OnUpdate()
 {
-	gfx->BindArray(va);
+	gfx->GetVertexArrayManager().Bind(va);
 
 	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
-	gfx->DrawIndexed(va->GetVertexCount());
+	gfx->DrawIndexed(gfx->GetVertexArrayManager().GetVertexCount(va));
 }
 
 void SandboxApp::OnStop() {}

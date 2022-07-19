@@ -11,16 +11,17 @@
 #include "OpenGLUtility.h"
 
 #include "OpenGLContext.h"
-#include "OpenGLVertexBuffer.h"
-#include "OpenGLIndexBuffer.h"
-#include "OpenGLUniformBuffer.h"
-#include "OpenGLVertexArray.h"
-#include "OpenGLShaderProgram.h"
-#include "OpenGLTexture2D.h"
+#include "Resources/OpenGLVertexBuffer.h"
+#include "Resources/OpenGLIndexBuffer.h"
+#include "Resources/OpenGLUniformBuffer.h"
+#include "Resources/OpenGLVertexArray.h"
+#include "Resources/OpenGLShaderProgram.h"
+#include "Resources/OpenGLTexture2D.h"
 
 using namespace SXG;
 
 OpenGLContext::OpenGLContext()
+	: m_VertexArrayManager(&m_VertexBufferManager, &m_IndexBufferManager)
 {
 #ifndef SMPX_CONFIG_DIST
 	glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
@@ -33,15 +34,6 @@ OpenGLContext::OpenGLContext()
 		}
 	}, nullptr);
 #endif
-
-	// TODO: Dynamically poll the number of texture slots
-	// available on this system.
-	//
-	m_SelectedTexture2Ds.resize(16);
-
-	GLint maxUniformBindings;
-	glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &maxUniformBindings);
-	m_SelectedUBOs.resize(maxUniformBindings);
 }
 
 OpenGLContext::~OpenGLContext()
@@ -49,146 +41,59 @@ OpenGLContext::~OpenGLContext()
 	LOG_INFO("Deleting resource: Graphics Context");
 }
 
-Ref<VertexBuffer> OpenGLContext::CreateBuffer(VertexBufferProps props)
-{
-	return CreateRef<OpenGLVertexBuffer>(props);
-}
-
-Ref<IndexBuffer> OpenGLContext::CreateIndexBuffer(IndexBufferProps props)
-{
-	return CreateRef<OpenGLIndexBuffer>(props);
-}
-
-Ref<UniformBuffer> OpenGLContext::CreateUniformBuffer(UniformBufferProps props)
-{
-	return CreateRef<OpenGLUniformBuffer>(props);
-}
-
-Ref<VertexArray> OpenGLContext::CreateArray(VertexArrayProps props)
-{
-	return CreateRef<OpenGLVertexArray>(props);
-}
-
-Ref<Texture2D> OpenGLContext::CreateTexture2D(TextureProps props)
-{
-	return CreateRef<OpenGLTexture2D>(props);
-}
-
-Ref<ShaderProgram> OpenGLContext::CreateShaderFromFiles(const std::string &vert_path, const std::string &frag_path)
-{
-	std::string vert_src = ReadFileToString(vert_path);
-	std::string frag_src = ReadFileToString(frag_path);
-
-	return CreateRef<OpenGLShaderProgram>(vert_src, frag_src);
-}
-
 void OpenGLContext::Draw(int count, int start_offset)
 {
-	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
-	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray *>(m_SelectedVA.get());
+	VertexArrayHandle va = m_VertexArrayManager.GetSelected();
 
-	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
-	GLenum topology = SXGTopologyToGL(drawInfo.topology);
+	ASSERT_CRITICAL(va, "No vertex array has been selected!");
+	OpenGLVertexArray glva = m_VertexArrayManager.Get(va);
+	
+	GLenum topology = SXGTopologyToGL(glva.props.topology);
 
 	glDrawArrays(topology, start_offset, count);
 }
 
 void OpenGLContext::DrawInstanced(int instances, int count, int start_offset)
 {
-	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
-	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray *>(m_SelectedVA.get());
+	VertexArrayHandle va = m_VertexArrayManager.GetSelected();
 
-	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
-	GLenum topology = SXGTopologyToGL(drawInfo.topology);
+	ASSERT_CRITICAL(va, "No vertex array has been selected!");
+	OpenGLVertexArray glva = m_VertexArrayManager.Get(va);
+	GLenum topology = SXGTopologyToGL(glva.props.topology);
 
 	glDrawArraysInstanced(topology, start_offset, count, instances);
 }
 
 void OpenGLContext::DrawIndexed(int count)
 {
-	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
-	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray*>(m_SelectedVA.get());
+	VertexArrayHandle va = m_VertexArrayManager.GetSelected();
 
-	ASSERT_CRITICAL(glva->HasIndexBuffer(), "Vertex array must have a set index buffer for DrawIndexed!");
-	
-	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
-	GLenum topology = SXGTopologyToGL(drawInfo.topology);
-	GLenum type = SXGTypeToGL(drawInfo.indexType);
+	ASSERT_CRITICAL(va, "No vertex array has been selected!");
+	OpenGLVertexArray glva = m_VertexArrayManager.Get(va);
+
+	ASSERT_CRITICAL(glva.HasIndexBuffer(), "Vertex array must have a set index buffer for DrawIndexed!");
+	OpenGLIndexBuffer glib = m_IndexBufferManager.Get(glva.indexBuffer);
+
+	GLenum topology = SXGTopologyToGL(glva.props.topology);
+	GLenum type = SXGTypeToGL(glib.indexType);
 
 	glDrawElements(topology, count, type, nullptr);
 }
 
 void OpenGLContext::DrawIndexedInstanced(int instances, int count)
 {
-	ASSERT_CRITICAL(m_SelectedVA != nullptr, "No vertex array has been selected!");
-	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray *>(m_SelectedVA.get());
+	VertexArrayHandle va = m_VertexArrayManager.GetSelected();
 
-	ASSERT_CRITICAL(glva->HasIndexBuffer(), "Vertex array must have a set index buffer for DrawIndexed!");
+	ASSERT_CRITICAL(va, "No vertex array has been selected!");
+	OpenGLVertexArray glva = m_VertexArrayManager.Get(va);
 
-	VertexArrayDrawInfo drawInfo = glva->GetDrawInfo();
-	GLenum topology = SXGTopologyToGL(drawInfo.topology);
-	GLenum type = SXGTypeToGL(drawInfo.indexType);
+	ASSERT_CRITICAL(glva.HasIndexBuffer(), "Vertex array must have a set index buffer for DrawIndexed!");
+	OpenGLIndexBuffer glib = m_IndexBufferManager.Get(glva.indexBuffer);
+
+	GLenum topology = SXGTopologyToGL(glva.props.topology);
+	GLenum type = SXGTypeToGL(glib.indexType);
 
 	glDrawElementsInstanced(topology, count, type, nullptr, instances);
-}
-
-void OpenGLContext::BindArray(Ref<VertexArray> va)
-{
-	ASSERT_CRITICAL(va != nullptr, "Vertex Array is null!");
-
-	// The passed buffer better be an opengl buffer, otherwise
-	// I will be disappointed >:(
-	//
-	OpenGLVertexArray *glva = static_cast<OpenGLVertexArray*>(va.get());
-	glBindVertexArray(glva->ContextID());
-
-	m_SelectedVA = std::move(va);
-}
-
-void OpenGLContext::BindShaderProgram(Ref<ShaderProgram> shader)
-{
-	ASSERT_CRITICAL(shader != nullptr, "Shader Program is null!");
-
-	// The passed shader better be an opengl shader, otherwise
-	// I will be disappointed >:(
-	//
-	OpenGLShaderProgram *glsp = static_cast<OpenGLShaderProgram*>(shader.get());
-	glUseProgram(glsp->ContextID());
-
-	m_SelectedShaderProgram = std::move(shader);
-}
-
-void OpenGLContext::BindUniformBuffer(Ref<UniformBuffer> ub, int slot, ShaderStageType shader)
-{
-	ASSERT_CRITICAL(slot >= 0, "Slot index must be 0 or greater");
-	ASSERT_CRITICAL(slot < m_SelectedUBOs.size(), "Maximum UBO slots allowed on this hardware is {}", m_SelectedUBOs.size());
-
-	// The passed buffer better be an opengl buffer, otherwise
-	// I will be disappointed >:(
-	//
-	OpenGLUniformBuffer *glub = static_cast<OpenGLUniformBuffer *>(ub.get());
-		
-	// NOTE: The passed shader stage enum is ignored for OpenGL implementations.
-	//		 This is for use with DX11.
-	//
-	glUniformBlockBinding(glub->ContextID(), slot, slot);
-	glBindBufferBase(GL_UNIFORM_BUFFER, slot, glub->ContextID());
-
-	m_SelectedUBOs[slot] = std::move(ub);
-}
-
-void OpenGLContext::BindTexture2D(Ref<Texture2D> texture, int unit)
-{
-	ASSERT_CRITICAL(texture != nullptr, "Texture is null!");
-	ASSERT_CRITICAL(-1 < unit && unit < 16, "Texture unit must be between [{0}, {1}]!", 0, 15);
-
-	// The passed texture better be an opengl texture, otherwise
-	// I will be disappointed >:(
-	//
-	OpenGLTexture2D *gltx = static_cast<OpenGLTexture2D*>(texture.get());
-	glBindTextureUnit(unit, gltx->ContextID());
-
-	m_SelectedTexture2Ds[unit] = std::move(texture);
 }
 
 void OpenGLContext::ClearColor(float r, float g, float b, float a)

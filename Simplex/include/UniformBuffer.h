@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Resource.h>
 #include <Sxg.h>
 
 struct UniformBufferProps
@@ -12,10 +13,16 @@ struct UniformBufferProps
 	SXG::BufferUsage usage = SXG::BufferUsage::STATIC;
 };
 
-class UniformBuffer
+struct UniformBufferHandle : public ResourceHandle {};
+
+class UniformBufferManager
 {
 public:
-	virtual ~UniformBuffer() = default;
+	virtual ~UniformBufferManager() = default;
 
-	virtual void BufferSubdata() = 0;
+	virtual UniformBufferHandle Create(const UniformBufferProps &) = 0;
+	virtual void Destroy(UniformBufferHandle) = 0;
+
+	virtual void Bind(UniformBufferHandle, int slot, SXG::ShaderStageType stage) const = 0;
+	virtual void BufferSubdata(UniformBufferHandle, std::uint32_t offset, std::uint32_t size, void *data) = 0;
 };
