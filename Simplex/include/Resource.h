@@ -11,7 +11,7 @@ struct ResourceHandle
 	friend class ResourcePool;
 
 public:
-	bool IsValid() const { return magic != 0; }
+	[[nodiscard]] bool IsValid() const { return magic != 0; }
 	operator bool() const { return IsValid(); }
 
 protected:
