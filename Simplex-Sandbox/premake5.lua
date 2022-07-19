@@ -2,7 +2,6 @@
 -- Test project that will link with the Simplex Game Engine
 project "Simplex-Sandbox"
 	language "C++"
-	cppdialect "C++17"
 	kind "ConsoleApp"
 
 	files {

@@ -16,27 +16,5 @@ public:
     static void Init(const std::string &name);
     static void Shutdown();
 
-    template<typename... Args>
-    static void Info(const std::string &fmt, Args &&...args)
-    {
-        logger->info(fmt, std::forward<Args>(args)...);
-    }
-
-    template<typename... Args>
-    static void Warn(const std::string &fmt, Args &&...args)
-    {
-        logger->warn(fmt, std::forward<Args>(args)...);
-    }
-
-    template<typename... Args>
-    static void Error(const std::string &fmt, Args &&...args)
-    {
-        logger->error(fmt, std::forward<Args>(args)...);
-    }
-
-    template<typename... Args>
-    static void Critical(const std::string &fmt, Args &&...args)
-    {
-        logger->critical(fmt, std::forward<Args>(args)...);
-    }
+    static const auto& Get() { return logger; }
 };

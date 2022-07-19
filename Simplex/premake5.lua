@@ -9,7 +9,6 @@ group ""
 -- Simplex Game Engine project
 project "Simplex"
 	language "C++"
-	cppdialect "C++17"
 	kind "StaticLib"
 
 	pchheader "sxpch.h"

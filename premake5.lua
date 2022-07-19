@@ -6,6 +6,7 @@ workspace "Simplex"
 	startproject "Simplex-Sandbox"
 	architecture "x64"
 	staticruntime "on"
+	cppdialect "C++20"
 	flags "MultiProcessorCompile"
 
 	configurations {
