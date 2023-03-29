@@ -29,7 +29,8 @@ public:
 
 	virtual bool IsVysncEnabled() const override { return m_Data.props.vysnc; }
 	virtual bool IsVisible() const override { return m_Visible; }
-	
+	virtual GLFWwindow* GetNativeHandle() { return m_Handle; }
+
 	virtual Scope<ImGuiBackend> CreateGuiBackend() override;
 
 private:

@@ -160,15 +160,24 @@ void SandboxApp::OnStart()
 
 void SandboxApp::OnUpdate()
 {
+	m_Gui->GetDockspace().BeginCapture();
+
 	gfx->GetVertexArrayManager().Bind(va);
 
 	gfx->ClearRenderTarget(Clear::COLOR_BUFFER_BIT);
 	gfx->DrawIndexed(gfx->GetVertexArrayManager().GetVertexCount(va));
+
+	m_Gui->GetDockspace().EndCapture();
 }
 
 void SandboxApp::OnStop() {}
 
 void SandboxApp::OnImGui()
 {
+	m_Gui->GetDockspace().Begin();
+
+	m_Gui->GetDockspace().Update();
 	ImGui::ShowDemoWindow();
+	
+	m_Gui->GetDockspace().End();
 }

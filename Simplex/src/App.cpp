@@ -14,7 +14,7 @@ App::App(const AppProps &props)
 	Log::Init("SIMPLEX");
 #endif
 
-    m_Window = Window::Create(props.windowProps);
+	m_Window = Window::Create(props.windowProps);
 
 #ifdef SMPX_IMGUI
 	m_Gui = m_Window->CreateGuiBackend();
@@ -34,17 +34,18 @@ App::~App()
 
 void App::Run()
 {
+	m_Running = true;
+	
 	OnStart();
 
-	m_Running = true;
-	m_Window->SetVisible();
+	m_Window->SetVisible(true);
 
 	while (m_Running)
 	{
 		OnUpdate();
 
 #ifdef SMPX_IMGUI
-		m_Gui->StartFrame();
+		m_Gui->BeginFrame();
 		OnImGui();
 		m_Gui->EndFrame();
 #endif

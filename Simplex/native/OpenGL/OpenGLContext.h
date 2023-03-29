@@ -8,6 +8,7 @@
 #include "Resources/OpenGLIndexBuffer.h"
 #include "Resources/OpenGLUniformBuffer.h"
 #include "Resources/OpenGLTexture2D.h"
+#include "Resources/OpenGLFrameBuffer.h"
 
 class OpenGLContext : public GraphicsContext
 {
@@ -18,6 +19,7 @@ public:
 	virtual VertexArrayManager &GetVertexArrayManager() override { return m_VertexArrayManager; }
 	virtual Texture2DManager &GetTexture2DManager() override { return m_Texture2DManager; }
 	virtual ShaderProgramManager &GetShaderManager() override { return m_ShaderProgramManager; }
+	virtual OpenGLFrameBufferManager &GetFrameBufferManager() override { return m_FrameBufferManager; }
 
 	virtual void Draw(int count, int start_offset) override;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) override;
@@ -42,4 +44,5 @@ private:
 	OpenGLVertexArrayManager m_VertexArrayManager;
 	OpenGLTexture2DManager m_Texture2DManager;
 	OpenGLShaderProgramManager m_ShaderProgramManager;
+	OpenGLFrameBufferManager m_FrameBufferManager;
 };

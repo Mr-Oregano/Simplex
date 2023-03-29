@@ -9,6 +9,7 @@
 #include <VertexArray.h>
 #include <ShaderProgram.h>
 #include <Texture2D.h>
+#include <FrameBuffer.h>
 
 #include <vector>
 #include <string>
@@ -31,6 +32,7 @@ public:
 	virtual VertexArrayManager& GetVertexArrayManager() = 0;
 	virtual Texture2DManager& GetTexture2DManager() = 0;
 	virtual ShaderProgramManager& GetShaderManager() = 0;
+	virtual FrameBufferManager &GetFrameBufferManager() = 0;
 
 	virtual void Draw(int count, int start_offset = 0) = 0;
 	virtual void DrawInstanced(int instances, int count, int start_offset = 0) = 0;

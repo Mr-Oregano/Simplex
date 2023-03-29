@@ -5,9 +5,13 @@
 class Win32GuiBackend : public ImGuiBackend
 {
 public:
-	Win32GuiBackend(GLFWwindow *window);
+	Win32GuiBackend(Window& window);
 	~Win32GuiBackend();
 
-	virtual void StartFrame() override;
+	virtual void BeginFrame() override;
 	virtual void EndFrame() override;
+
+private:
+	ImVec2 m_DisplaySize;
+	ImFont *m_Font = nullptr;
 };

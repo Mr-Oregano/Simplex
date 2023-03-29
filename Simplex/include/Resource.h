@@ -37,7 +37,7 @@ public:
 private:
 	struct Slot
 	{
-		T data;
+		T data{};
 		bool active = false;
 		std::uint32_t magic : 16 { 0 };
 	};
@@ -45,7 +45,7 @@ private:
 private:
 	const Slot &GetSlotConst(ResourceHandle handle) const;
 	Slot &GetSlot(ResourceHandle handle);
-	std::uint32_t FindNextVacantIndex();
+	void FindNextVacantIndex();
 
 private:
 	std::uint32_t m_NextVacantIndex = 0;
@@ -98,7 +98,7 @@ inline ResourceHandle ResourcePool<T>::Emplace(T &&t)
 	m_Slots[handle.index].active = true;
 	m_Slots[handle.index].magic = handle.magic;
 
-	m_NextVacantIndex = FindNextVacantIndex();
+	FindNextVacantIndex();
 	return handle;
 }
 
@@ -113,15 +113,19 @@ inline void ResourcePool<T>::Release(ResourceHandle handle)
 }
 
 template<typename T>
-inline std::uint32_t ResourcePool<T>::FindNextVacantIndex()
+inline void ResourcePool<T>::FindNextVacantIndex()
 {
-	for (int i = 0; i < m_Slots.size(); ++i)
-		if (!m_Slots[i].active)
-			return i;
+	for (std::uint32_t i = m_NextVacantIndex + 1; i < m_Slots.size(); ++i)
+	{
+		if (m_Slots[i].active)
+			continue;
 
+		m_NextVacantIndex = i;
+		return;
+	}
+	
 	LOG_INFO("Resource pool requesting more memory.");
 
-	std::size_t next = m_Slots.size();
+	m_NextVacantIndex = (std::uint32_t) m_Slots.size();
 	m_Slots.resize(m_Slots.size() * 2u);
-	return (std::uint32_t)next;
 }

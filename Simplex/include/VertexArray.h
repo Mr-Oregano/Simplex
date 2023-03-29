@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Resource.h>
-#include <Ref.h>
 
 #include <Sxg.h>
 #include <VertexBuffer.h>
