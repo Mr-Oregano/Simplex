@@ -29,9 +29,6 @@ protected:
 private:
 	void Run();
 
-public:
-	static Scope<App> CreateApp();
-
 protected:
 	Scope<Window> m_Window;
 	Scope<ImGuiBackend> m_Gui;

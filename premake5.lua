@@ -41,3 +41,4 @@ workspace "Simplex"
 
 	include "Simplex"
 	include "Simplex-Sandbox"
+	include "Simplex-Tests"

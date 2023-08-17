@@ -8,3 +8,7 @@
 	path = Simplex/vendor/imgui
 	url = https://github.com/Mr-Oregano/imgui.git
 	branch = docking
+[submodule "Simplex-Tests/vendor/googletest"]
+	path = Simplex-Tests/vendor/googletest
+	url = git@github.com:google/googletest.git
+	branch = f8d7d77

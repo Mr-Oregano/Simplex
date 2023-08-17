@@ -14,25 +14,6 @@
 
 using namespace SXG;
 
-Scope<App> App::CreateApp()
-{
-	AppProps props;
-
-	props.name = "The Simplex Sandbox";
-	props.version = MAKE_APP_VERSION(1, 0);
-	props.windowProps.title = "Simplex Sandbox";
-	props.windowProps.width = 1920;
-	props.windowProps.height = 1080;
-	props.windowProps.resizable = true;
-	props.windowProps.vysnc = false;
-	props.windowProps.mode = WindowMode::Maximized;
-	props.windowProps.graphics.desiredAPI = API::OPENGL;
-	props.windowProps.graphics.desiredVersion = MakeOpenGLVersion(4, 6);
-	props.windowProps.graphics.minVersion = MakeOpenGLVersion(4, 5);
-
-	return CreateScope<SandboxApp>(props);
-}
-
 SandboxApp::SandboxApp(const AppProps &props) : App(props) {}
 
 SandboxApp::~SandboxApp() {}
@@ -180,4 +161,26 @@ void SandboxApp::OnImGui()
 	ImGui::ShowDemoWindow();
 	
 	m_Gui->GetDockspace().End();
+}
+
+int main()
+{
+	AppProps props;
+
+	props.name = "The Simplex Sandbox";
+	props.version = MAKE_APP_VERSION(1, 0);
+	props.windowProps.title = "Simplex Sandbox";
+	props.windowProps.width = 1920;
+	props.windowProps.height = 1080;
+	props.windowProps.resizable = true;
+	props.windowProps.vysnc = false;
+	props.windowProps.mode = WindowMode::Maximized;
+	props.windowProps.graphics.desiredAPI = API::OPENGL;
+	props.windowProps.graphics.desiredVersion = MakeOpenGLVersion(4, 6);
+	props.windowProps.graphics.minVersion = MakeOpenGLVersion(4, 5);
+
+	Scope<App> app = CreateScope<SandboxApp>(props);
+	app->Run();
+
+	return 0;
 }

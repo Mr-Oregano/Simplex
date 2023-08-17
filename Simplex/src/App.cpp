@@ -55,12 +55,3 @@ void App::Run()
 
 	OnStop();
 }
-
-int main() 
-{
-	Scope<App> app = App::CreateApp();
-
-	app->Run();
-
-	return 0;
-}
