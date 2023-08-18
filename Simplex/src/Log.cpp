@@ -24,5 +24,5 @@ void Log::Init(const std::string &name)
 
 void Log::Shutdown()
 {
-
+	// No resources to release yet
 }
