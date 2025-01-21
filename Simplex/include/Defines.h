@@ -15,7 +15,7 @@
 #ifdef _MSC_VER
 	#define SMPX_FORCE_INLINE __forceinline
 #elif __GNUC__
-	#define FORCE_INLINE __attribute__((always_inline))
+	#define SMPX_FORCE_INLINE __attribute__((always_inline))
 #else
-	#define FORCE_INLINE
+	#define SMPX_FORCE_INLINE
 #endif
